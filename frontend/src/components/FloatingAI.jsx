@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, Sparkles } from "lucide-react";
 
 /**
- * Floating "Talk to AI" button — bottom right.
+ * Floating "Talk to AI" button — bottom LEFT (avoids Emergent badge bottom-right).
  * Hidden on /chat and /login pages.
  */
 export default function FloatingAI() {
@@ -19,23 +19,9 @@ export default function FloatingAI() {
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ delay: 0.6, type: "spring", stiffness: 200, damping: 15 }}
-      className="fixed bottom-6 right-6 z-50 flex items-end gap-3"
+      className="fixed bottom-6 left-6 z-[60] flex items-end gap-3"
       data-testid="floating-ai"
     >
-      <AnimatePresence>
-        {hover && (
-          <motion.div
-            initial={{ opacity: 0, x: 10, scale: 0.9 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 10, scale: 0.9 }}
-            className="hidden sm:flex items-center gap-2 mb-2 px-4 h-12 rounded-2xl glass shadow-soft text-sm font-semibold text-ink"
-          >
-            <Sparkles className="w-4 h-4 text-sage" />
-            Talk to CareConnect AI
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       <button
         onClick={() => nav("/chat")}
         onMouseEnter={() => setHover(true)}
@@ -47,7 +33,6 @@ export default function FloatingAI() {
         }}
         aria-label="Talk to AI"
       >
-        {/* pulsing rings */}
         <span
           className="absolute inset-0 rounded-full"
           style={{ background: "linear-gradient(135deg, #6366F1, #14B8A6)", opacity: 0.5, animation: "pulse-ring 2.4s ease-out infinite" }}
@@ -58,6 +43,20 @@ export default function FloatingAI() {
         />
         <MessageCircle className="relative w-6 h-6" strokeWidth={2.4} />
       </button>
+
+      <AnimatePresence>
+        {hover && (
+          <motion.div
+            initial={{ opacity: 0, x: -10, scale: 0.9 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: -10, scale: 0.9 }}
+            className="hidden sm:flex items-center gap-2 mb-2 px-4 h-12 rounded-2xl glass shadow-soft text-sm font-semibold text-ink"
+          >
+            <Sparkles className="w-4 h-4 text-sage" />
+            Talk to CareConnect AI
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

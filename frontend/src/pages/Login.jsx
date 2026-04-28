@@ -5,9 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import Logo from "../components/Logo";
 import { useAuth } from "../lib/auth";
+import { api } from "../lib/api";
 
 export default function Login() {
-  const { login, signup } = useAuth();
+  const { login, updateUser } = useAuth();
   const nav = useNavigate();
   const [tab, setTab] = useState("login");
   const [busy, setBusy] = useState(false);
@@ -26,13 +27,24 @@ export default function Login() {
         toast.success("Welcome back");
         nav("/", { replace: true });
       } else {
-        await signup(form.name, form.email, form.password);
+        // Call signup API directly so we can show success overlay BEFORE committing
+        // user to auth context (which would auto-redirect via PublicOnly).
+        const { data } = await api.post("/auth/signup", {
+          name: form.name, email: form.email, password: form.password,
+        });
+        // Persist token now so subsequent /api calls work, but DON'T set user yet.
+        localStorage.setItem("cc_token", data.token);
+        localStorage.setItem("cc_user", JSON.stringify(data.user));
+
         toast.success("🎉 Account created successfully — welcome to CareConnect!", {
           duration: 3000,
         });
         setSuccess(true);
-        // Show success state briefly so the user actually sees it
-        setTimeout(() => nav("/", { replace: true }), 1400);
+        // Hold the celebration screen ~1.6s, then commit user + redirect.
+        setTimeout(() => {
+          updateUser(data.user);
+          nav("/", { replace: true });
+        }, 1600);
       }
     } catch (err) {
       toast.error(err?.response?.data?.detail || "Something went wrong");

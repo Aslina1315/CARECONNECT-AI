@@ -59,8 +59,8 @@ export default function Dashboard() {
       <section className="grid lg:grid-cols-2 gap-6">
         <div className="glass-card p-6">
           <h3 className="font-heading text-lg font-bold text-ink flex items-center gap-2"><Activity className="w-4 h-4 text-sage" /> Need distribution</h3>
-          <div className="h-64 mt-4">
-            <ResponsiveContainer>
+          <div className="h-64 mt-4 min-h-[240px]">
+            <ResponsiveContainer width="100%" height="100%">
               <BarChart data={needData}>
                 <XAxis dataKey="name" tick={{ fontSize: 11, fill: "#6B7F78" }} interval={0} angle={-15} textAnchor="end" height={50} />
                 <YAxis tick={{ fontSize: 11, fill: "#6B7F78" }} allowDecimals={false} />
@@ -75,8 +75,8 @@ export default function Dashboard() {
 
         <div className="glass-card p-6">
           <h3 className="font-heading text-lg font-bold text-ink flex items-center gap-2"><Activity className="w-4 h-4 text-urgent" /> Urgency mix</h3>
-          <div className="h-64 mt-4">
-            <ResponsiveContainer>
+          <div className="h-64 mt-4 min-h-[240px]">
+            <ResponsiveContainer width="100%" height="100%">
               <BarChart data={urgencyData}>
                 <XAxis dataKey="name" tick={{ fontSize: 12, fill: "#6B7F78" }} />
                 <YAxis tick={{ fontSize: 11, fill: "#6B7F78" }} allowDecimals={false} />
