@@ -1,0 +1,91 @@
+{
+  "theme": "Light",
+  "archetype": "1 (Organic & Earthy)",
+  "vibe": "Comforting, elegant, professional, trustworthy, aesthetic, warm",
+  "colors": {
+    "background": "#FDFBF7",
+    "surface": "#FFFFFF",
+    "primary": "#5E8B7E",
+    "primary_hover": "#4A7065",
+    "secondary": "#D4A373",
+    "secondary_hover": "#B3875B",
+    "text_main": "#2B3A35",
+    "text_muted": "#6B7F78",
+    "border": "#E8E5DF",
+    "urgent": "#E07A5F",
+    "success": "#81B29A"
+  },
+  "typography": {
+    "heading_font": "Outfit, sans-serif",
+    "body_font": "DM Sans, sans-serif",
+    "import_url": "https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap",
+    "rules": {
+      "h1": "font-heading text-4xl sm:text-5xl lg:text-6xl tracking-tight font-semibold text-[#2B3A35]",
+      "h2": "font-heading text-2xl sm:text-3xl lg:text-4xl tracking-tight font-medium text-[#2B3A35]",
+      "h3": "font-heading text-xl sm:text-2xl font-medium text-[#2B3A35]",
+      "body": "font-body text-base leading-relaxed text-[#6B7F78]",
+      "small": "font-body text-sm font-medium tracking-wide uppercase text-[#6B7F78]"
+    }
+  },
+  "layout_spacing": {
+    "card_radius": "rounded-3xl",
+    "button_radius": "rounded-full",
+    "input_radius": "rounded-2xl",
+    "shadows": {
+      "soft": "shadow-[0_8px_30px_rgb(0,0,0,0.04)]",
+      "hover": "shadow-[0_20px_40px_rgb(0,0,0,0.08)]"
+    },
+    "padding": "generous (p-6, p-8, p-12)",
+    "glassmorphism": "bg-white/70 backdrop-blur-xl border border-white/40"
+  },
+  "components": {
+    "buttons": "Soft shadows, transform transition (hover:-translate-y-1, active:scale-95). Primary CTA is solid #5E8B7E with white text.",
+    "inputs": "Light border (#E8E5DF), focus:ring-2 focus:ring-[#5E8B7E]/50, bg-white, large touch targets (h-12 or h-14).",
+    "cards": "White surface, 3xl radius, soft shadow, hover states (slight lift and deeper shadow). Content inside MUST have p-6 minimum.",
+    "badges": "Pill shaped, soft tinted background (e.g., bg-[#5E8B7E]/10 text-[#5E8B7E] for success, bg-[#E07A5F]/10 text-[#E07A5F] for priority).",
+    "chat_bubbles": "User: bg-white text-main border border-[#E8E5DF]. AI: bg-[#5E8B7E]/10 text-[#2B3A35]. Both rounded-2xl.",
+    "animations": "Use framer-motion. Staggered list reveals for Find Help cards. Gentle fade-up (y: 20 -> 0) for sections. Soft bouncing or pulsing for the logo and loading states."
+  },
+  "icons": {
+    "library": "lucide-react",
+    "style": "Stroke-based, friendly, use framer-motion to animate them on hover (e.g. slight rotation or scale)."
+  },
+  "media": {
+    "logo_animated": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/76efff76-2b4d-4175-af2a-a2e0b061631b/images/daefd7ee0ce7fefe430c12bf584f6f0d60cb5403022c55812899de29382b4a88.png",
+      "description": "Elegant CareConnect logo. Animate this with a gentle pulse effect using framer-motion."
+    },
+    "hero_background": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/76efff76-2b4d-4175-af2a-a2e0b061631b/images/5c8d823cd462f810dbdbff20cce387e87eed8c11767af4a9453656f1b5291c33.png",
+      "description": "Soft abstract fluid wave background for the Home hero section."
+    },
+    "cute_3d_icon": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/76efff76-2b4d-4175-af2a-a2e0b061631b/images/7d25bfae837b89944f90c51ec3f2dea9d9cc7d59ade3dd037e69ec889187e076.png",
+      "description": "3D medical/heart icon for empty states, chat welcome screen, or profile avatar."
+    },
+    "organization_food": {
+      "url": "https://images.pexels.com/photos/6646987/pexels-photo-6646987.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Image for Food Bank or Community Meal organization card."
+    },
+    "organization_medical": {
+      "url": "https://images.pexels.com/photos/3958422/pexels-photo-3958422.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Image for Mental Health or Medical Clinic organization card."
+    },
+    "organization_donations": {
+      "url": "https://images.pexels.com/photos/6646926/pexels-photo-6646926.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Image for Financial or Material Support organization card."
+    }
+  },
+  "instructions_to_main_agent": [
+    "Strictly use the 'Outfit' and 'DM Sans' Google fonts. Add them via index.html or global css.",
+    "Extend Tailwind configuration with the custom colors, fonts, and shadows defined in this JSON.",
+    "Implement Framer Motion for ALL page transitions, layout reveals, and micro-interactions.",
+    "For the Find Help page, build beautiful rounded-3xl cards with the provided real images.",
+    "The Chat Assistant should feel friendly and therapeutic. Use the cute_3d_icon for the AI avatar and soft sage backgrounds for AI messages.",
+    "Dashboard should avoid typical boring SaaS look. Use generous padding, rounded-3xl widget containers, and soft shadow.",
+    "Do NOT use pure #000000 or #FFFFFF for large backgrounds; strictly adhere to the warm off-white #FDFBF7.",
+    "Ensure all interactive elements have data-testid attributes for testing.",
+    "Do NOT use any placeholder image services. ONLY use the URLs provided in this JSON.",
+    "Use Lucide React icons everywhere."
+  ]
+}
