@@ -52,6 +52,8 @@ class UserOut(BaseModel):
     email: EmailStr
     phone: Optional[str] = ""
     location: Optional[str] = ""
+    bio: Optional[str] = ""
+    picture: Optional[str] = ""
 
 class TokenOut(BaseModel):
     token: str
@@ -61,6 +63,8 @@ class ProfileUpdate(BaseModel):
     name: Optional[str] = None
     phone: Optional[str] = None
     location: Optional[str] = None
+    bio: Optional[str] = None
+    picture: Optional[str] = None  # base64 data URL or remote URL
 
 class HelpRequestIn(BaseModel):
     need: str
@@ -225,12 +229,14 @@ async def signup(body: SignupIn):
         "password": hash_password(body.password),
         "phone": "",
         "location": "",
+        "bio": "",
+        "picture": "",
         "settings": {"notifications": True, "dark_mode": False, "save_activity": True},
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
     await db.users.insert_one(doc)
     token = create_token(user_id)
-    return TokenOut(token=token, user=UserOut(**{k: doc[k] for k in ["id", "name", "email", "phone", "location"]}))
+    return TokenOut(token=token, user=UserOut(**{k: doc.get(k, "") for k in ["id", "name", "email", "phone", "location", "bio", "picture"]}))
 
 @api.post("/auth/login", response_model=TokenOut)
 async def login(body: LoginIn):
@@ -241,7 +247,8 @@ async def login(body: LoginIn):
     return TokenOut(
         token=token,
         user=UserOut(id=user["id"], name=user["name"], email=user["email"],
-                     phone=user.get("phone", ""), location=user.get("location", "")),
+                     phone=user.get("phone", ""), location=user.get("location", ""),
+                     bio=user.get("bio", ""), picture=user.get("picture", "")),
     )
 
 
@@ -296,20 +303,25 @@ async def google_session(body: GoogleSessionIn):
     return TokenOut(
         token=token,
         user=UserOut(id=user["id"], name=user["name"], email=user["email"],
-                     phone=user.get("phone", ""), location=user.get("location", "")),
+                     phone=user.get("phone", ""), location=user.get("location", ""),
+                     bio=user.get("bio", ""), picture=user.get("picture", "")),
     )
 
 @api.get("/auth/me", response_model=UserOut)
 async def me(user=Depends(get_current_user)):
-    return UserOut(**{k: user.get(k, "") for k in ["id", "name", "email", "phone", "location"]})
+    return UserOut(**{k: user.get(k, "") for k in ["id", "name", "email", "phone", "location", "bio", "picture"]})
 
 @api.put("/auth/profile", response_model=UserOut)
 async def update_profile(body: ProfileUpdate, user=Depends(get_current_user)):
     update = {k: v for k, v in body.model_dump().items() if v is not None}
+    # Lightweight size guard for inline base64 images (~ <1.2MB raw)
+    pic = update.get("picture")
+    if pic and isinstance(pic, str) and len(pic) > 1_600_000:
+        raise HTTPException(status_code=413, detail="Image too large (max ~1.2MB)")
     if update:
         await db.users.update_one({"id": user["id"]}, {"$set": update})
     fresh = await db.users.find_one({"id": user["id"]}, {"_id": 0, "password": 0})
-    return UserOut(**{k: fresh.get(k, "") for k in ["id", "name", "email", "phone", "location"]})
+    return UserOut(**{k: fresh.get(k, "") for k in ["id", "name", "email", "phone", "location", "bio", "picture"]})
 
 # REQUESTS
 @api.post("/requests", response_model=HelpRequestOut)

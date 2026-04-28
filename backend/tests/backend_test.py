@@ -5,7 +5,7 @@ import uuid
 import requests
 import pytest
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://care-compass-107.preview.emergentagent.com').rstrip('/')
+BASE_URL = os.environ['REACT_APP_BACKEND_URL'].rstrip('/')
 API = f"{BASE_URL}/api"
 
 UNIQUE_EMAIL = f"test+{int(time.time())}{uuid.uuid4().hex[:6]}@example.com"
@@ -78,6 +78,58 @@ def test_update_profile(session, auth):
     # GET to verify persistence
     r2 = session.get(f"{API}/auth/me", headers=h)
     assert r2.json()["location"] == "Mumbai"
+
+
+# --- New: bio + picture support on /auth/me and PUT /auth/profile ---
+def test_me_returns_bio_and_picture_keys(session, auth):
+    h = {"Authorization": f"Bearer {auth['token']}"}
+    r = session.get(f"{API}/auth/me", headers=h)
+    assert r.status_code == 200
+    body = r.json()
+    assert "bio" in body
+    assert "picture" in body
+
+
+def test_update_profile_bio_and_picture_persist(session, auth):
+    h = {"Authorization": f"Bearer {auth['token']}"}
+    bio = "I love helping the community in Mumbai."
+    # Tiny PNG data URL (~70 chars) — well under the 1.6M cap
+    picture = (
+        "data:image/png;base64,"
+        "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+    )
+    r = session.put(f"{API}/auth/profile", json={"bio": bio, "picture": picture}, headers=h)
+    assert r.status_code == 200, r.text
+    body = r.json()
+    assert body["bio"] == bio
+    assert body["picture"] == picture
+    # Verify persistence via GET /auth/me
+    r2 = session.get(f"{API}/auth/me", headers=h)
+    assert r2.status_code == 200
+    me_body = r2.json()
+    assert me_body["bio"] == bio
+    assert me_body["picture"] == picture
+
+
+def test_update_profile_picture_too_large_returns_413(session, auth):
+    h = {"Authorization": f"Bearer {auth['token']}"}
+    # Build a string > 1_600_000 chars to trigger the size guard
+    huge = "data:image/png;base64," + ("A" * 1_700_000)
+    r = session.put(f"{API}/auth/profile", json={"picture": huge}, headers=h)
+    assert r.status_code == 413, f"expected 413 got {r.status_code} body={r.text[:200]}"
+
+
+def test_login_test_user_returns_bio_picture_keys(session):
+    # Spec: login test@example.com / Pass1234! and /auth/me returns bio + picture
+    r = session.post(f"{API}/auth/login", json={"email": "test@example.com", "password": "Pass1234!"})
+    if r.status_code != 200:
+        pytest.skip(f"seed test user not available: {r.status_code}")
+    token = r.json()["token"]
+    h = {"Authorization": f"Bearer {token}"}
+    r2 = session.get(f"{API}/auth/me", headers=h)
+    assert r2.status_code == 200
+    body = r2.json()
+    assert "bio" in body and "picture" in body
 
 
 # --- Requests ---

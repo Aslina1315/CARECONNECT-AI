@@ -4,7 +4,7 @@ import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell, Tooltip } from 
 import { TrendingUp, Users, Link2, AlertTriangle, Activity, Globe2 } from "lucide-react";
 import { api } from "../lib/api";
 
-const COLORS = ["#5E8B7E", "#D4A373", "#81B29A", "#E07A5F", "#6B7F78", "#B3875B"];
+const COLORS = ["#E11D48", "#F59E0B", "#B45309", "#DC2626", "#F43F5E", "#92400E"];
 
 const Metric = ({ icon: Icon, label, value, hue, idx }) => (
   <motion.div
@@ -83,7 +83,7 @@ export default function Dashboard() {
                 <Tooltip cursor={{ fill: "rgba(224,122,95,0.08)" }} contentStyle={{ borderRadius: 12, border: "1px solid #E8E5DF" }} />
                 <Bar dataKey="value" radius={[12, 12, 0, 0]}>
                   {urgencyData.map((u, i) => (
-                    <Cell key={i} fill={u.name === "HIGH" ? "#E07A5F" : u.name === "MEDIUM" ? "#D4A373" : "#81B29A"} />
+                    <Cell key={i} fill={u.name === "HIGH" ? "#DC2626" : u.name === "MEDIUM" ? "#F59E0B" : "#16A34A"} />
                   ))}
                 </Bar>
               </BarChart>
@@ -132,7 +132,7 @@ export default function Dashboard() {
                 <div className="text-ink font-medium">{r.category}</div>
                 <div className="text-xs text-muted">{r.location}</div>
               </div>
-              <span className={`pill ${r.urgency === "HIGH" ? "bg-urgent/10 text-urgent" : r.urgency === "MEDIUM" ? "bg-terracotta/15 text-terracotta-hover" : "bg-success/15 text-success"}`}>
+              <span className={`pill ${r.urgency === "HIGH" ? "bg-urgent/10 text-urgent border border-urgent/30" : r.urgency === "MEDIUM" ? "bg-terracotta/15 text-terracotta-hover border border-terracotta/30" : "bg-success/10 text-success border border-success/30"}`}>
                 {r.urgency}
               </span>
             </li>

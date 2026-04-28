@@ -1,11 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Sparkles, AlertTriangle, Bot, User as UserIcon } from "lucide-react";
+import { Send, Sparkles, AlertTriangle, Bot, User as UserIcon, HeartHandshake, Phone } from "lucide-react";
 import { toast } from "sonner";
 import { api } from "../lib/api";
 import { useAuth } from "../lib/auth";
-
-const ICON_3D = "https://static.prod-images.emergentagent.com/jobs/76efff76-2b4d-4175-af2a-a2e0b061631b/images/7d25bfae837b89944f90c51ec3f2dea9d9cc7d59ade3dd037e69ec889187e076.png";
 
 const SUGGESTIONS = [
   "I'm feeling really anxious lately",
@@ -13,6 +11,9 @@ const SUGGESTIONS = [
   "I need food for my family",
   "Where can I find a free clinic?",
 ];
+
+// Warm, caring abstract image (Pexels) — softens the chat header
+const HEADER_IMAGE = "https://images.pexels.com/photos/6647037/pexels-photo-6647037.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=300&w=900";
 
 export default function Chat() {
   const { user } = useAuth();
@@ -45,28 +46,51 @@ export default function Chat() {
   return (
     <div className="grid lg:grid-cols-[1fr_320px] gap-6" data-testid="chat-page">
       <div className="glass-card p-0 overflow-hidden flex flex-col h-[calc(100vh-160px)] min-h-[560px]">
-        <div className="px-6 py-5 border-b border-line flex items-center gap-3 bg-gradient-to-r from-sage/8 via-indigo-glow/5 to-transparent">
-          <motion.img
-            src={ICON_3D} alt="" className="w-10 h-10"
-            animate={{ y: [0, -3, 0] }} transition={{ duration: 2.4, repeat: Infinity }}
+        {/* Header with warm image + glass overlay */}
+        <div className="relative h-32 overflow-hidden">
+          <img src={HEADER_IMAGE} alt="" className="absolute inset-0 w-full h-full object-cover" />
+          <div
+            className="absolute inset-0"
+            style={{ background: "linear-gradient(135deg, rgba(225,29,72,0.78) 0%, rgba(244,63,94,0.65) 50%, rgba(245,158,11,0.78) 100%)" }}
           />
-          <div>
-            <div className="font-heading text-lg text-ink leading-tight">CareConnect Assistant</div>
-            <div className="text-xs text-muted">Warm, private, and here to help</div>
+          <div className="relative h-full flex items-center gap-4 px-6">
+            <motion.div
+              animate={{ scale: [1, 1.06, 1] }}
+              transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+              className="w-16 h-16 rounded-2xl bg-white/95 flex items-center justify-center shadow-soft"
+            >
+              <HeartHandshake className="w-8 h-8" style={{ color: "#E11D48" }} strokeWidth={2.2} />
+            </motion.div>
+            <div className="text-white">
+              <div className="font-heading text-2xl font-bold leading-tight">CareConnect Assistant</div>
+              <div className="text-sm text-white/90 flex items-center gap-2">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
+                </span>
+                Online · warm, private, here for you
+              </div>
+            </div>
+            <div className="ml-auto hidden sm:block">
+              <span className="pill bg-white/95 text-sage border border-white">
+                <Sparkles className="w-3 h-3" /> AI · Gemini
+              </span>
+            </div>
           </div>
-          <span className="ml-auto pill bg-success/15 text-success border border-success/30">
-            <Sparkles className="w-3 h-3" /> Online
-          </span>
         </div>
 
         <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 sm:px-6 py-6 space-y-4" data-testid="chat-messages">
           {messages.length === 0 && (
-            <div className="text-center py-12">
-              <motion.img
-                src={ICON_3D} className="w-28 h-28 mx-auto"
-                animate={{ scale: [1, 1.05, 1] }} transition={{ duration: 3, repeat: Infinity }}
-              />
-              <h3 className="font-heading text-2xl text-ink mt-4">How can I support you today?</h3>
+            <div className="text-center py-10">
+              <motion.div
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                className="w-24 h-24 mx-auto rounded-3xl flex items-center justify-center text-white shadow-soft"
+                style={{ background: "linear-gradient(135deg, #E11D48, #F59E0B)" }}
+              >
+                <HeartHandshake className="w-10 h-10" />
+              </motion.div>
+              <h3 className="font-heading text-2xl font-bold text-ink mt-5">How can I support you today?</h3>
               <p className="text-muted mt-2 max-w-md mx-auto">
                 Share whatever is on your mind. I'll listen, and gently guide you to help.
               </p>
@@ -74,7 +98,7 @@ export default function Chat() {
                 {SUGGESTIONS.map((s) => (
                   <button
                     key={s} onClick={() => send(s)}
-                    className="px-4 h-10 rounded-full bg-sage-50 text-ink text-sm hover:bg-sage hover:text-white transition-all"
+                    className="px-4 h-10 rounded-full bg-sage-50 text-sage font-semibold text-sm hover:bg-sage hover:text-white transition-all border border-sage/20"
                     data-testid="chat-suggestion"
                   >
                     {s}
@@ -92,7 +116,10 @@ export default function Chat() {
                 className={`flex gap-3 ${m.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 {m.role === "assistant" && (
-                  <div className="w-9 h-9 rounded-full bg-sage/15 text-sage flex items-center justify-center flex-shrink-0">
+                  <div
+                    className="w-9 h-9 rounded-full flex items-center justify-center text-white flex-shrink-0"
+                    style={{ background: "linear-gradient(135deg, #E11D48, #F59E0B)" }}
+                  >
                     <Bot className="w-4 h-4" />
                   </div>
                 )}
@@ -101,21 +128,23 @@ export default function Chat() {
                     m.role === "user"
                       ? "bg-ink text-white rounded-br-md"
                       : m.emergency
-                      ? "bg-urgent/10 text-ink border border-urgent/30 rounded-bl-md"
-                      : "bg-sage/10 text-ink border border-sage/15 rounded-bl-md"
+                      ? "bg-urgent/10 text-ink border border-urgent/40 rounded-bl-md"
+                      : "bg-sage/8 text-ink border border-sage/20 rounded-bl-md"
                   }`}
                   data-testid={`chat-msg-${m.role}`}
                 >
                   {m.emergency && (
-                    <div className="flex items-center gap-2 text-urgent font-medium mb-1">
+                    <div className="flex items-center gap-2 text-urgent font-bold mb-1">
                       <AlertTriangle className="w-4 h-4" /> Emergency support
                     </div>
                   )}
                   {m.content}
                 </div>
                 {m.role === "user" && (
-                  <div className="w-9 h-9 rounded-full bg-ink text-white flex items-center justify-center flex-shrink-0">
-                    <UserIcon className="w-4 h-4" />
+                  <div className="w-9 h-9 rounded-full bg-ink text-white flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    {user?.picture
+                      ? <img src={user.picture} alt="" className="w-full h-full object-cover" />
+                      : <UserIcon className="w-4 h-4" />}
                   </div>
                 )}
               </motion.div>
@@ -124,7 +153,12 @@ export default function Chat() {
 
           {sending && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-3">
-              <div className="w-9 h-9 rounded-full bg-sage/15 text-sage flex items-center justify-center"><Bot className="w-4 h-4" /></div>
+              <div
+                className="w-9 h-9 rounded-full flex items-center justify-center text-white"
+                style={{ background: "linear-gradient(135deg, #E11D48, #F59E0B)" }}
+              >
+                <Bot className="w-4 h-4" />
+              </div>
               <div className="bg-sage/10 px-4 py-3 rounded-2xl flex items-center gap-1.5">
                 {[0, 1, 2].map((d) => (
                   <motion.span key={d} className="w-2 h-2 rounded-full bg-sage"
@@ -137,7 +171,7 @@ export default function Chat() {
 
         <form
           onSubmit={(e) => { e.preventDefault(); send(); }}
-          className="border-t border-line px-4 sm:px-6 py-4 flex items-center gap-3 bg-white"
+          className="border-t border-line px-4 sm:px-6 py-4 flex items-center gap-3 bg-white/80"
         >
           <input
             data-testid="chat-input"
@@ -158,21 +192,25 @@ export default function Chat() {
       </div>
 
       <aside className="space-y-4">
-        <div className="glass-card p-6">
-          <h3 className="font-heading text-lg font-bold text-ink">Crisis lines</h3>
-          <p className="text-sm text-muted mt-1">If you're in danger, reach out now.</p>
-          <ul className="mt-4 space-y-3 text-sm">
-            <li className="flex items-center justify-between"><span>Emergency</span><a className="text-sage font-medium" href="tel:112">112</a></li>
-            <li className="flex items-center justify-between"><span>iCall (Mental Health)</span><a className="text-sage font-medium" href="tel:9152987821">9152987821</a></li>
-            <li className="flex items-center justify-between"><span>Vandrevala Foundation</span><a className="text-sage font-medium" href="tel:18602662345">1860-266-2345</a></li>
+        <div className="glass-card p-6 relative overflow-hidden">
+          <div className="absolute -top-6 -right-6 w-28 h-28 rounded-full opacity-30 blur-2xl"
+            style={{ background: "linear-gradient(135deg, #DC2626, #F59E0B)" }} />
+          <h3 className="font-heading text-lg font-bold text-ink relative flex items-center gap-2">
+            <Phone className="w-4 h-4 text-urgent" /> Crisis lines
+          </h3>
+          <p className="text-sm text-muted mt-1 relative">If you're in danger, reach out now.</p>
+          <ul className="mt-4 space-y-3 text-sm relative">
+            <li className="flex items-center justify-between"><span>Emergency</span><a className="text-urgent font-bold" href="tel:112">112</a></li>
+            <li className="flex items-center justify-between"><span>iCall (Mental Health)</span><a className="text-sage font-bold" href="tel:9152987821">9152987821</a></li>
+            <li className="flex items-center justify-between"><span>Vandrevala Foundation</span><a className="text-sage font-bold" href="tel:18602662345">1860-266-2345</a></li>
           </ul>
         </div>
         <div className="glass-card p-6 relative overflow-hidden">
           <div className="absolute -top-6 -right-6 w-28 h-28 rounded-full opacity-30 blur-2xl"
-            style={{ background: "linear-gradient(135deg, #14B8A6, #6366F1)" }} />
+            style={{ background: "linear-gradient(135deg, #F59E0B, #E11D48)" }} />
           <h3 className="font-heading text-lg font-bold text-ink relative">Tip</h3>
-          <p className="text-sm text-muted mt-1 leading-relaxed">
-            After chatting, head to <span className="text-sage font-medium">Find Help</span> — we'll suggest organizations near you.
+          <p className="text-sm text-muted mt-1 leading-relaxed relative">
+            After chatting, head to <span className="text-sage font-bold">Find Help</span> — we'll suggest organizations near you.
           </p>
         </div>
       </aside>

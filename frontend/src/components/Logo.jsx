@@ -13,14 +13,14 @@ export default function Logo({ size = 40, withText = true, className = "" }) {
         style={{
           width: size,
           height: size,
-          background: "linear-gradient(135deg, #2563EB 0%, #6366F1 60%, #14B8A6 100%)",
-          boxShadow: "0 10px 30px rgba(99, 102, 241, 0.35)",
+          background: "linear-gradient(135deg, #E11D48 0%, #F43F5E 50%, #F59E0B 100%)",
+          boxShadow: "0 10px 30px rgba(225, 29, 72, 0.35)",
         }}
       >
         <motion.span
           className="absolute inset-0 rounded-2xl"
-          style={{ background: "linear-gradient(135deg, #2563EB, #14B8A6)" }}
-          animate={{ scale: [1, 1.18, 1], opacity: [0.55, 0, 0.55] }}
+          style={{ background: "linear-gradient(135deg, #E11D48, #F59E0B)" }}
+          animate={{ scale: [1, 1.18, 1], opacity: [0.6, 0, 0.6] }}
           transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
@@ -33,7 +33,7 @@ export default function Logo({ size = 40, withText = true, className = "" }) {
       </motion.div>
       {withText && (
         <div className="leading-tight">
-          <div className="font-heading font-extrabold text-ink text-lg tracking-tight">
+          <div className="font-heading font-bold text-ink text-lg tracking-tight">
             Care<span className="text-gradient">Connect</span>
           </div>
           <div className="text-[10px] uppercase tracking-[0.28em] text-muted font-bold">AI · Help, Instantly</div>

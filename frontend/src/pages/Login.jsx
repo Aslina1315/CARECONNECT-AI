@@ -106,7 +106,7 @@ export default function Login() {
                   animate={{ scale: 1 }}
                   transition={{ type: "spring", stiffness: 200, damping: 12 }}
                   className="w-20 h-20 rounded-full flex items-center justify-center text-white"
-                  style={{ background: "linear-gradient(135deg, #2563EB, #14B8A6)" }}
+                  style={{ background: "linear-gradient(135deg, #E11D48, #F59E0B)" }}
                 >
                   <CheckCircle2 className="w-10 h-10" />
                 </motion.div>
@@ -133,7 +133,7 @@ export default function Login() {
               className={`px-6 h-10 text-sm rounded-full font-semibold transition-all ${
                 tab === "login" ? "text-white shadow-soft" : "text-muted"
               }`}
-              style={tab === "login" ? { background: "linear-gradient(135deg, #2563EB, #6366F1)" } : {}}
+              style={tab === "login" ? { background: "linear-gradient(135deg, #E11D48, #F59E0B)" } : {}}
             >
               Login
             </button>
@@ -143,7 +143,7 @@ export default function Login() {
               className={`px-6 h-10 text-sm rounded-full font-semibold transition-all ${
                 tab === "signup" ? "text-white shadow-soft" : "text-muted"
               }`}
-              style={tab === "signup" ? { background: "linear-gradient(135deg, #2563EB, #6366F1)" } : {}}
+              style={tab === "signup" ? { background: "linear-gradient(135deg, #E11D48, #F59E0B)" } : {}}
             >
               Sign up
             </button>

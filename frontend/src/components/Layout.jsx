@@ -6,16 +6,13 @@ import FloatingAI from "./FloatingAI";
 export default function Layout({ children }) {
   return (
     <div className="relative min-h-screen overflow-x-hidden">
-      {/* Decorative blobs — blue + mint + indigo glow */}
-      <div className="blob bg-sage/35 w-[460px] h-[460px] -top-32 -left-24 animate-blob" />
-      <div
-        className="blob w-[520px] h-[520px] top-40 -right-32 animate-blob"
-        style={{ background: "rgba(20, 184, 166, 0.30)", animationDelay: "3s" }}
-      />
-      <div
-        className="blob w-[400px] h-[400px] bottom-0 left-1/3 animate-blob"
-        style={{ background: "rgba(99, 102, 241, 0.30)", animationDelay: "6s" }}
-      />
+      {/* Warm decorative blobs — rose + amber + saddle */}
+      <div className="blob w-[460px] h-[460px] -top-32 -left-24 animate-blob"
+        style={{ background: "rgba(225, 29, 72, 0.32)" }} />
+      <div className="blob w-[520px] h-[520px] top-40 -right-32 animate-blob"
+        style={{ background: "rgba(245, 158, 11, 0.32)", animationDelay: "3s" }} />
+      <div className="blob w-[400px] h-[400px] bottom-0 left-1/3 animate-blob"
+        style={{ background: "rgba(180, 83, 9, 0.22)", animationDelay: "6s" }} />
 
       <Navbar />
 

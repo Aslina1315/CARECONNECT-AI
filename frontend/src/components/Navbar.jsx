@@ -51,8 +51,8 @@ export default function Navbar() {
                 }`
               }
               style={({ isActive }) => isActive ? {
-                background: "linear-gradient(135deg, #2563EB 0%, #6366F1 100%)",
-                boxShadow: "0 8px 22px rgba(99, 102, 241, 0.35)",
+                background: "linear-gradient(135deg, #E11D48 0%, #F59E0B 100%)",
+                boxShadow: "0 8px 22px rgba(225, 29, 72, 0.32)",
               } : {}}
             >
               <Icon className="w-4 h-4" />
@@ -66,12 +66,20 @@ export default function Navbar() {
             className="hidden sm:flex items-center gap-2 pl-1 pr-3 h-10 rounded-full bg-white border border-line shadow-soft"
             data-testid="profile-chip"
           >
-            <div
-              className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-white text-xs"
-              style={{ background: "linear-gradient(135deg, #2563EB, #14B8A6)" }}
-            >
-              {user?.name?.[0]?.toUpperCase() || "U"}
-            </div>
+            {user?.picture ? (
+              <img
+                src={user.picture}
+                alt=""
+                className="w-8 h-8 rounded-full object-cover"
+              />
+            ) : (
+              <div
+                className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-white text-xs"
+                style={{ background: "linear-gradient(135deg, #E11D48, #F59E0B)" }}
+              >
+                {user?.name?.[0]?.toUpperCase() || "U"}
+              </div>
+            )}
             <span className="max-w-[120px] truncate text-sm font-semibold text-ink">{user?.name}</span>
           </div>
           <button
@@ -113,7 +121,7 @@ export default function Navbar() {
                 }`
               }
               style={({ isActive }) => isActive ? {
-                background: "linear-gradient(135deg, #2563EB, #6366F1)",
+                background: "linear-gradient(135deg, #E11D48, #F59E0B)",
               } : {}}
             >
               <Icon className="w-4 h-4" />
