@@ -130,7 +130,7 @@ export default function Home() {
   return (
     <div className="space-y-24 sm:space-y-28" data-testid="home-page">
       {/* ════ 1. HERO ════ */}
-      <section className="relative pt-2">
+      <section data-testid="hero-section" className="relative pt-2">
         <div className="hero-glow grid lg:grid-cols-[1.4fr_1fr] gap-12 items-center">
           <div>
             <Eyebrow>Warm, AI-powered care · in moments</Eyebrow>
@@ -218,7 +218,7 @@ export default function Home() {
       </section>
 
       {/* ════ 2. QUICK ACTIONS ════ */}
-      <section>
+      <section data-testid="quick-actions-section">
         <SectionHead
           eyebrow="Quick actions"
           title="What do you need right now?"
@@ -241,7 +241,7 @@ export default function Home() {
       </section>
 
       {/* ════ 3. SUPPORT CATEGORIES ════ */}
-      <section>
+      <section data-testid="support-categories-section">
         <SectionHead
           eyebrow="Support categories"
           title="Help, organized by what matters."
@@ -270,7 +270,7 @@ export default function Home() {
       </section>
 
       {/* ════ 4. AI CHAT SHOWCASE ════ */}
-      <section>
+      <section data-testid="ai-chat-showcase-section">
         <SectionHead
           eyebrow="Meet our AI"
           title="A caring assistant, anytime you need."
@@ -369,7 +369,7 @@ export default function Home() {
       </section>
 
       {/* ════ 5. HOW IT WORKS ════ */}
-      <section>
+      <section data-testid="how-it-works-section">
         <SectionHead
           eyebrow="How it works"
           title="Three steps to real help."
@@ -406,7 +406,7 @@ export default function Home() {
       </section>
 
       {/* ════ 6. IMPACT / TRUST ════ */}
-      <section className="relative">
+      <section data-testid="impact-section" className="relative">
         <div className="glass-card p-8 sm:p-12 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-72 h-72 rounded-full opacity-25 blur-3xl"
             style={{ background: "linear-gradient(135deg, #E11D48, #F43F5E)" }} />
@@ -451,7 +451,7 @@ export default function Home() {
       </section>
 
       {/* ════ 7. REQUEST HELP ════ */}
-      <section>
+      <section data-testid="request-help-cta-section">
         <SectionHead
           eyebrow="Request help"
           title="Need a hand right now?"
@@ -527,7 +527,7 @@ export default function Home() {
       </section>
 
       {/* ════ 8. Final CTA ════ */}
-      <section>
+      <section data-testid="final-cta-section">
         <div
           className="rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden"
           style={{ background: "linear-gradient(135deg, #E11D48 0%, #F43F5E 50%, #F59E0B 100%)" }}

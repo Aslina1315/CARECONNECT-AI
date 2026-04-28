@@ -47,7 +47,7 @@ export default function Chat() {
     <div className="grid lg:grid-cols-[1fr_320px] gap-6" data-testid="chat-page">
       <div className="glass-card p-0 overflow-hidden flex flex-col h-[calc(100vh-160px)] min-h-[560px]">
         {/* Header with warm image + glass overlay */}
-        <div className="relative h-32 overflow-hidden">
+        <div data-testid="chat-header" className="relative h-32 overflow-hidden">
           <img src={HEADER_IMAGE} alt="" className="absolute inset-0 w-full h-full object-cover" />
           <div
             className="absolute inset-0"
@@ -58,6 +58,7 @@ export default function Chat() {
               animate={{ scale: [1, 1.06, 1] }}
               transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
               className="w-16 h-16 rounded-2xl bg-white/95 flex items-center justify-center shadow-soft"
+              data-testid="chat-bot-avatar"
             >
               <HeartHandshake className="w-8 h-8" style={{ color: "#E11D48" }} strokeWidth={2.2} />
             </motion.div>
