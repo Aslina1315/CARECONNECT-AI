@@ -61,8 +61,10 @@ const QuickAction = ({ to, Icon, title, desc, gradient, accent, testid }) => (
 
 const SupportCategory = ({ Icon, title, description, gradient, queryTag, idx }) => {
   const nav = useNavigate();
+  const tid = `cat-${queryTag.split(" ")[0].toLowerCase()}`;
   return (
     <motion.button
+      data-testid={tid}
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}

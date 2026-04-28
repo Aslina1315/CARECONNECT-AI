@@ -9,7 +9,7 @@ import { useAuth } from "../lib/auth";
 // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
 export default function AuthCallback() {
   const nav = useNavigate();
-  const { updateUser } = useAuth();
+  const { updateUser, logout } = useAuth();
   const handled = useRef(false);
 
   useEffect(() => {
@@ -35,11 +35,14 @@ export default function AuthCallback() {
         window.history.replaceState(null, "", "/");
         nav("/", { replace: true });
       } catch (err) {
+        // Clear any stale auth so PublicOnly doesn't immediately bounce us off /login
+        logout();
         toast.error(err?.response?.data?.detail || "Google sign-in failed");
+        window.history.replaceState(null, "", "/login");
         nav("/login", { replace: true });
       }
     })();
-  }, [nav, updateUser]);
+  }, [nav, updateUser, logout]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-6 text-center">
