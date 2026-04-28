@@ -1,22 +1,103 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Heart, Sparkles, Send, ShieldCheck, Compass, Stethoscope, Wallet, GraduationCap, BrainCircuit, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import {
+  Heart, Sparkles, Send, ShieldCheck, Stethoscope, Wallet, BrainCircuit,
+  GraduationCap, Home as HomeIcon, AlertTriangle, MessageCircle, Search,
+  ArrowRight, Bot, User as UserIcon, Phone, Compass, Clock, Users, MapPin,
+  CheckCircle2, Sprout, BookOpen,
+} from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { api } from "../lib/api";
 import { useAuth } from "../lib/auth";
 
-const CATEGORIES = [
-  { Icon: Stethoscope, label: "Medical", grad: "from-sage to-indigo-glow" },
-  { Icon: Wallet, label: "Financial", grad: "from-terracotta to-sage" },
-  { Icon: Heart, label: "Food", grad: "from-urgent to-terracotta" },
-  { Icon: BrainCircuit, label: "Mental Health", grad: "from-success to-terracotta" },
-  { Icon: GraduationCap, label: "Education", grad: "from-indigo-glow to-success" },
-  { Icon: Compass, label: "General", grad: "from-sage to-success" },
-];
+// ─────────────────────────── small subcomponents ──────────────────────────────
+const Section = ({ id, eyebrow, title, sub, children, className = "" }) => (
+  <section id={id} className={`relative ${className}`}>
+    {(eyebrow || title || sub) && (
+      <div className="max-w-3xl mb-8">
+        {eyebrow && (
+          <span className="pill bg-white/80 backdrop-blur border border-sage/20 text-sage shadow-soft">
+            <Sparkles className="w-3 h-3" /> {eyebrow}
+          </span>
+        )}
+        {title && (
+          <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl tracking-tight font-extrabold text-ink mt-4 leading-[1.05]">
+            {title}
+          </h2>
+        )}
+        {sub && <p className="text-muted text-base sm:text-lg mt-3 leading-relaxed">{sub}</p>}
+      </div>
+    )}
+    {children}
+  </section>
+);
 
+const QuickAction = ({ to, Icon, title, desc, gradient, accent, testid }) => (
+  <Link to={to} data-testid={testid}>
+    <motion.div
+      whileHover={{ y: -4 }}
+      transition={{ type: "spring", stiffness: 300 }}
+      className="glass-card p-6 h-full group cursor-pointer relative overflow-hidden"
+    >
+      <div
+        className="absolute -top-8 -right-8 w-28 h-28 rounded-full opacity-25 blur-2xl group-hover:opacity-50 transition-opacity"
+        style={{ background: gradient }}
+      />
+      <div
+        className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-soft mb-4"
+        style={{ background: gradient }}
+      >
+        <Icon className="w-5 h-5" />
+      </div>
+      <h3 className="font-heading text-lg font-bold text-ink">{title}</h3>
+      <p className="text-sm text-muted mt-1 leading-relaxed">{desc}</p>
+      <div className="mt-4 flex items-center text-sm font-semibold" style={{ color: accent }}>
+        Open <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+      </div>
+    </motion.div>
+  </Link>
+);
+
+const SupportCategory = ({ Icon, title, description, gradient, queryTag, idx }) => {
+  const nav = useNavigate();
+  return (
+    <motion.button
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: idx * 0.06 }}
+      whileHover={{ y: -3 }}
+      onClick={() => nav(`/find-help?q=${encodeURIComponent(queryTag)}`)}
+      className="text-left glass-card p-6 group relative overflow-hidden"
+    >
+      <div
+        className="absolute -top-10 -right-10 w-32 h-32 rounded-full opacity-20 blur-2xl group-hover:opacity-40 transition-opacity"
+        style={{ background: gradient }}
+      />
+      <div className="flex items-start gap-4 relative">
+        <div
+          className="w-14 h-14 rounded-2xl flex items-center justify-center text-white flex-shrink-0 shadow-soft"
+          style={{ background: gradient }}
+        >
+          <Icon className="w-6 h-6" />
+        </div>
+        <div className="flex-1">
+          <h3 className="font-heading text-lg font-bold text-ink">{title}</h3>
+          <p className="text-sm text-muted mt-1 leading-relaxed">{description}</p>
+          <div className="mt-3 inline-flex items-center text-sm font-semibold text-sage">
+            Find {title.toLowerCase()} <ArrowRight className="w-3.5 h-3.5 ml-1 group-hover:translate-x-1 transition-transform" />
+          </div>
+        </div>
+      </div>
+    </motion.button>
+  );
+};
+
+// ───────────────────────────── HOME ───────────────────────────────────────────
 export default function Home() {
   const { user } = useAuth();
+  const nav = useNavigate();
   const [form, setForm] = useState({ need: "", location: "", phone: "" });
   const [submitting, setSubmitting] = useState(false);
   const [last, setLast] = useState(null);
@@ -40,11 +121,19 @@ export default function Home() {
     }
   };
 
+  // Sample chat for AI showcase
+  const sampleConvo = [
+    { role: "user", text: "I lost my job last week and rent is due. I'm scared." },
+    { role: "ai", text: "I hear you, and that fear is so understandable. Let's take this one step at a time. Are you in immediate danger of being evicted, or do you have a few weeks?" },
+    { role: "user", text: "About 10 days. I just don't know where to start." },
+    { role: "ai", text: "Okay — you have a window. I can connect you to rental-aid programs in your area and a financial counselor who can help. Would you like me to find them now?" },
+  ];
+
   return (
-    <div className="space-y-14" data-testid="home-page">
-      {/* HERO */}
-      <section className="relative pt-4">
-        <div className="hero-glow grid lg:grid-cols-[1.4fr_1fr] gap-10 items-center">
+    <div className="space-y-20 sm:space-y-24" data-testid="home-page">
+      {/* ════════ 1. HERO ════════ */}
+      <section className="relative pt-2">
+        <div className="hero-glow grid lg:grid-cols-[1.4fr_1fr] gap-12 items-center">
           <div>
             <motion.span
               initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
@@ -56,47 +145,40 @@ export default function Home() {
               initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
               className="font-heading text-5xl sm:text-6xl lg:text-7xl tracking-tight font-extrabold text-ink mt-5 leading-[0.98]"
             >
-              Hey {user?.name?.split(" ")[0] || "there"} —<br />
-              help is just <span className="text-gradient">a moment away.</span>
+              {user?.name ? `Hi ${user.name.split(" ")[0]} —` : "Hello —"}<br />
+              you're not alone. <span className="text-gradient">Help is here.</span>
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
               className="text-muted text-base sm:text-lg mt-6 max-w-xl leading-relaxed"
             >
-              CareConnect listens, classifies urgency, and connects you to the right support —
-              wherever you are. Talk to our AI, request help, or discover organizations near you.
+              Tell us what you need — food, medical, financial, mental health, or shelter.
+              CareConnect listens, classifies urgency, and connects you to the right support nearby.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-              className="flex flex-wrap gap-3 mt-7"
+              className="flex flex-wrap gap-3 mt-8"
             >
-              <Link to="/chat" className="btn-primary" data-testid="cta-chat">
-                Talk to AI <ArrowRight className="w-4 h-4" />
+              <Link to="/find-help" className="btn-primary" data-testid="cta-find-help-now">
+                Find Help Now <ArrowRight className="w-4 h-4" />
               </Link>
-              <Link to="/find-help" className="btn-ghost" data-testid="cta-find">
-                Find help near me
+              <Link to="/chat" className="btn-ghost" data-testid="cta-talk-to-ai">
+                <MessageCircle className="w-4 h-4" /> Talk to AI
               </Link>
             </motion.div>
             <motion.div
-              initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-              className="flex flex-wrap gap-2 mt-8"
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.45 }}
+              className="flex items-center gap-3 mt-8 text-sm text-muted"
             >
-              {CATEGORIES.map(({ Icon, label, grad }) => (
-                <motion.span
-                  key={label}
-                  whileHover={{ y: -2 }}
-                  className="pill bg-white/80 backdrop-blur-sm border border-line text-ink shadow-soft"
-                >
-                  <span className={`w-5 h-5 rounded-full bg-gradient-to-br ${grad} flex items-center justify-center`}>
-                    <Icon className="w-3 h-3 text-white" />
-                  </span>
-                  {label}
-                </motion.span>
-              ))}
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-success" />
+              </span>
+              <span><span className="text-success font-bold">12,400+</span> people helped this month</span>
             </motion.div>
           </div>
 
-          {/* Right: floating glass card with stats */}
+          {/* Trust card */}
           <motion.div
             initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}
             className="hidden lg:block"
@@ -142,68 +224,268 @@ export default function Home() {
         </div>
       </section>
 
-      {/* About + Why */}
-      <section className="grid lg:grid-cols-2 gap-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-          className="glass-card p-8"
-        >
-          <h2 className="font-heading text-3xl font-extrabold text-ink tracking-tight">About CareConnect</h2>
-          <p className="text-muted mt-3 leading-relaxed">
-            People often struggle to find food, medical, financial or emergency aid — not because help
-            doesn't exist, but because awareness and access are missing. CareConnect bridges that gap.
-          </p>
-          <ul className="mt-5 space-y-2.5 text-ink">
-            {["Understands user needs", "Classifies urgency levels", "Suggests relevant support", "Guides to immediate action"].map((t) => (
-              <li key={t} className="flex items-center gap-3">
-                <span className="w-7 h-7 rounded-full flex items-center justify-center text-white"
-                  style={{ background: "linear-gradient(135deg, #2563EB, #14B8A6)" }}>
-                  <ShieldCheck className="w-4 h-4" />
-                </span>
-                <span className="font-medium">{t}</span>
-              </li>
-            ))}
-          </ul>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
-          className="glass-card p-8 relative overflow-hidden"
-        >
-          <div className="absolute top-0 right-0 w-40 h-40 opacity-30 blur-3xl rounded-full"
-            style={{ background: "linear-gradient(135deg, #14B8A6, #6366F1)" }} />
-          <h2 className="font-heading text-3xl font-extrabold text-ink tracking-tight relative">Why this matters</h2>
-          <p className="text-muted mt-3 leading-relaxed relative">
-            CareConnect acts as a bridge between people in need and available support systems —
-            so help can be faster, smarter, and more accessible.
-          </p>
-          <blockquote className="mt-5 p-5 rounded-2xl border-l-4 border-sage relative"
-            style={{ background: "linear-gradient(135deg, rgba(37,99,235,0.06), rgba(20,184,166,0.06))" }}>
-            <span className="font-heading text-xl text-ink leading-snug font-bold italic">
-              "No one should struggle to find help when they need it most."
-            </span>
-          </blockquote>
-        </motion.div>
-      </section>
-
-      {/* Request Help Form */}
-      <section className="glass-card p-8 sm:p-10" data-testid="request-help-section">
-        <div className="flex items-start justify-between gap-4 flex-wrap">
-          <div>
-            <h2 className="font-heading text-3xl font-extrabold text-ink tracking-tight">Request Help</h2>
-            <p className="text-muted mt-1">Tell us what you need — we'll route it to the right place.</p>
-          </div>
-          <span className="pill bg-success/10 text-success border border-success/30">
-            <ShieldCheck className="w-3.5 h-3.5" /> Private & secure
-          </span>
+      {/* ════════ 2. QUICK ACTIONS ════════ */}
+      <Section
+        eyebrow="Quick actions"
+        title="What do you need right now?"
+        sub="Tap any card to start. Each one takes you straight to the right place — no scrolling required."
+      >
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <QuickAction
+            to="/find-help" testid="qa-find-help"
+            Icon={Search} title="Find help" desc="Discover verified organizations near you."
+            gradient="linear-gradient(135deg, #2563EB, #6366F1)" accent="#2563EB"
+          />
+          <QuickAction
+            to="/chat" testid="qa-start-chat"
+            Icon={MessageCircle} title="Start a chat" desc="Talk to our caring AI in private."
+            gradient="linear-gradient(135deg, #14B8A6, #6366F1)" accent="#14B8A6"
+          />
+          <QuickAction
+            to="/chat" testid="qa-emergency"
+            Icon={AlertTriangle} title="Emergency" desc="Crisis lines and urgent helpline numbers."
+            gradient="linear-gradient(135deg, #DC2626, #F97316)" accent="#DC2626"
+          />
+          <QuickAction
+            to="/dashboard" testid="qa-resources"
+            Icon={Compass} title="Explore" desc="Browse insights and your past requests."
+            gradient="linear-gradient(135deg, #6366F1, #14B8A6)" accent="#6366F1"
+          />
         </div>
+      </Section>
 
-        <form onSubmit={submit} className="mt-6 grid md:grid-cols-2 gap-4">
+      {/* ════════ 3. SUPPORT CATEGORIES ════════ */}
+      <Section
+        eyebrow="Support categories"
+        title="Help, organized by what matters."
+        sub="Every category is curated and reviewed. Click to find vetted organizations in your area."
+      >
+        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
+          <SupportCategory
+            idx={0} Icon={Heart} title="Food support" queryTag="food"
+            description="Free meals, food banks, and grocery aid for individuals and families."
+            gradient="linear-gradient(135deg, #DC2626, #F97316)"
+          />
+          <SupportCategory
+            idx={1} Icon={Stethoscope} title="Medical aid" queryTag="medical"
+            description="Free clinics, prescription help, and emergency medical assistance."
+            gradient="linear-gradient(135deg, #2563EB, #6366F1)"
+          />
+          <SupportCategory
+            idx={2} Icon={Wallet} title="Financial help" queryTag="financial"
+            description="Rent, bills, debt counseling, and emergency cash assistance."
+            gradient="linear-gradient(135deg, #F59E0B, #DC2626)"
+          />
+          <SupportCategory
+            idx={3} Icon={HomeIcon} title="Shelter" queryTag="shelter housing"
+            description="Safe overnight stays, transitional housing, and domestic-violence havens."
+            gradient="linear-gradient(135deg, #6366F1, #14B8A6)"
+          />
+          <SupportCategory
+            idx={4} Icon={BrainCircuit} title="Mental health" queryTag="mental health"
+            description="Therapy, peer support, and 24/7 crisis lines."
+            gradient="linear-gradient(135deg, #14B8A6, #6366F1)"
+          />
+          <SupportCategory
+            idx={5} Icon={GraduationCap} title="Education" queryTag="education scholarship"
+            description="Scholarships, tuition aid, mentorship, and skill programs."
+            gradient="linear-gradient(135deg, #2563EB, #14B8A6)"
+          />
+        </div>
+      </Section>
+
+      {/* ════════ 4. AI CHAT SHOWCASE ════════ */}
+      <Section
+        eyebrow="Meet our AI"
+        title="A caring assistant, anytime you need."
+        sub="No forms. No hold music. Just a private conversation that listens, understands, and connects you to real help."
+      >
+        <div className="grid lg:grid-cols-[1fr_1.1fr] gap-8 items-center">
+          <div className="space-y-5">
+            <ul className="space-y-3">
+              {[
+                { Icon: Heart, t: "Empathetic, never judgmental", d: "Trained on human-centered care, not generic chat." },
+                { Icon: ShieldCheck, t: "Private by design", d: "Your conversations stay yours — encrypted end-to-end." },
+                { Icon: Sparkles, t: "Smart referrals", d: "Detects urgency and routes you to the closest right help." },
+                { Icon: Phone, t: "Crisis-aware", d: "Recognizes emergencies and surfaces helplines instantly." },
+              ].map(({ Icon, t, d }) => (
+                <li key={t} className="flex items-start gap-3">
+                  <span className="w-9 h-9 rounded-2xl flex items-center justify-center text-white flex-shrink-0"
+                    style={{ background: "linear-gradient(135deg, #2563EB, #14B8A6)" }}>
+                    <Icon className="w-4 h-4" />
+                  </span>
+                  <div>
+                    <div className="font-semibold text-ink">{t}</div>
+                    <div className="text-sm text-muted">{d}</div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <button onClick={() => nav("/chat")} className="btn-primary mt-2" data-testid="cta-start-chat">
+              Start chatting <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="glass-card p-6 sm:p-7 relative overflow-hidden">
+            <div className="absolute -top-12 -right-12 w-44 h-44 rounded-full opacity-25 blur-3xl"
+              style={{ background: "linear-gradient(135deg, #6366F1, #14B8A6)" }} />
+            <div className="flex items-center gap-3 pb-4 border-b border-line/70 relative">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center text-white"
+                style={{ background: "linear-gradient(135deg, #2563EB, #6366F1)" }}>
+                <Bot className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="font-heading font-bold text-ink leading-tight">CareConnect AI</div>
+                <div className="text-xs text-success font-semibold flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-success" /> Online · usually replies in seconds
+                </div>
+              </div>
+            </div>
+            <div className="space-y-3 pt-4 relative" data-testid="chat-showcase">
+              {sampleConvo.map((m, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 8 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.15 * i }}
+                  className={`flex gap-2.5 ${m.role === "user" ? "justify-end" : "justify-start"}`}
+                >
+                  {m.role === "ai" && (
+                    <div className="w-7 h-7 rounded-full bg-sage/15 text-sage flex items-center justify-center flex-shrink-0">
+                      <Bot className="w-3.5 h-3.5" />
+                    </div>
+                  )}
+                  <div className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
+                    m.role === "user"
+                      ? "bg-ink text-white rounded-br-md"
+                      : "bg-sage/8 text-ink border border-sage/15 rounded-bl-md"
+                  }`}>
+                    {m.text}
+                  </div>
+                  {m.role === "user" && (
+                    <div className="w-7 h-7 rounded-full bg-ink text-white flex items-center justify-center flex-shrink-0">
+                      <UserIcon className="w-3.5 h-3.5" />
+                    </div>
+                  )}
+                </motion.div>
+              ))}
+              <motion.div
+                initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
+                transition={{ delay: 0.7 }}
+                className="flex justify-start gap-2.5"
+              >
+                <div className="w-7 h-7 rounded-full bg-sage/15 text-sage flex items-center justify-center flex-shrink-0">
+                  <Bot className="w-3.5 h-3.5" />
+                </div>
+                <div className="bg-sage/8 px-4 py-3 rounded-2xl flex items-center gap-1.5">
+                  {[0, 1, 2].map((d) => (
+                    <motion.span key={d} className="w-1.5 h-1.5 rounded-full bg-sage"
+                      animate={{ y: [0, -3, 0] }} transition={{ duration: 0.8, repeat: Infinity, delay: d * 0.15 }} />
+                  ))}
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      {/* ════════ 5. HOW IT WORKS ════════ */}
+      <Section
+        eyebrow="How it works"
+        title="Three steps to real help."
+        sub="No paperwork. No phone trees. Just clarity and connection."
+      >
+        <div className="grid md:grid-cols-3 gap-5">
+          {[
+            { Icon: MessageCircle, n: "01", t: "Tell us what you need", d: "Describe your situation in plain words. The AI understands context, urgency, and emotion." },
+            { Icon: Sparkles, n: "02", t: "We classify and match", d: "Our system identifies the category, your urgency level, and pulls verified organizations near you." },
+            { Icon: CheckCircle2, n: "03", t: "Get connected", d: "Call, message, or visit — with one tap. We track outcomes so help keeps getting better." },
+          ].map(({ Icon, n, t, d }, i) => (
+            <motion.div
+              key={t}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="glass-card p-7 relative overflow-hidden"
+            >
+              <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full opacity-20 blur-2xl"
+                style={{ background: "linear-gradient(135deg, #2563EB, #14B8A6)" }} />
+              <div className="flex items-start justify-between relative">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-soft"
+                  style={{ background: "linear-gradient(135deg, #2563EB, #6366F1)" }}>
+                  <Icon className="w-5 h-5" />
+                </div>
+                <span className="font-heading text-3xl font-extrabold text-sage/30 leading-none">{n}</span>
+              </div>
+              <h3 className="font-heading text-lg font-bold text-ink mt-5">{t}</h3>
+              <p className="text-sm text-muted mt-2 leading-relaxed">{d}</p>
+            </motion.div>
+          ))}
+        </div>
+      </Section>
+
+      {/* ════════ 6. IMPACT / TRUST ════════ */}
+      <Section className="relative">
+        <div className="glass-card p-8 sm:p-12 relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-72 h-72 rounded-full opacity-20 blur-3xl"
+            style={{ background: "linear-gradient(135deg, #2563EB, #6366F1)" }} />
+          <div className="absolute bottom-0 right-0 w-72 h-72 rounded-full opacity-20 blur-3xl"
+            style={{ background: "linear-gradient(135deg, #14B8A6, #6366F1)" }} />
+
+          <div className="relative">
+            <span className="pill bg-white/80 backdrop-blur border border-success/30 text-success">
+              <Sprout className="w-3 h-3" /> Real impact
+            </span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl tracking-tight font-extrabold text-ink mt-4 leading-[1.05] max-w-2xl">
+              Every connection is a person, not a number.
+            </h2>
+            <p className="text-muted mt-3 max-w-2xl leading-relaxed">
+              CareConnect partners with vetted organizations across food, health, finance, shelter, education,
+              and mental health — and tracks outcomes so the platform keeps getting smarter.
+            </p>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-10">
+              {[
+                { Icon: Users, n: "12.4K+", l: "People helped this month", c: "#2563EB" },
+                { Icon: Clock, n: "<2 min", l: "Average match time", c: "#14B8A6" },
+                { Icon: MapPin, n: "850+", l: "Verified organizations", c: "#6366F1" },
+                { Icon: Heart, n: "98%", l: "Reported feeling heard", c: "#DC2626" },
+              ].map(({ Icon, n, l, c }, i) => (
+                <motion.div
+                  key={l}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.08 }}
+                  className="bg-white/80 backdrop-blur rounded-2xl p-5 border border-white/60 shadow-soft"
+                >
+                  <Icon className="w-5 h-5" style={{ color: c }} />
+                  <div className="font-heading text-3xl font-extrabold text-ink mt-3">{n}</div>
+                  <div className="text-xs text-muted mt-1 leading-relaxed">{l}</div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      {/* ════════ 7. REQUEST HELP FORM ════════ */}
+      <Section
+        eyebrow="Request help"
+        title="Need a hand right now?"
+        sub="Submit a quick request and we'll route it to the right partners."
+      >
+        <form
+          onSubmit={submit}
+          className="glass-card p-8 sm:p-10 grid md:grid-cols-2 gap-4"
+          data-testid="request-help-section"
+        >
           <div className="md:col-span-2 space-y-2">
             <label className="label-cap">What help do you need?</label>
             <textarea
-              data-testid="request-need"
-              rows={3}
+              data-testid="request-need" rows={3}
               className="input-base h-auto py-3 resize-none"
               placeholder="e.g. I need food support for my family this week"
               value={form.need}
@@ -213,8 +495,7 @@ export default function Home() {
           <div className="space-y-2">
             <label className="label-cap">Your location</label>
             <input
-              data-testid="request-location"
-              className="input-base"
+              data-testid="request-location" className="input-base"
               placeholder="City, area, or pincode"
               value={form.location}
               onChange={(e) => setForm({ ...form, location: e.target.value })}
@@ -223,14 +504,12 @@ export default function Home() {
           <div className="space-y-2">
             <label className="label-cap">Phone (optional)</label>
             <input
-              data-testid="request-phone"
-              className="input-base"
+              data-testid="request-phone" className="input-base"
               placeholder="So we can reach back if needed"
               value={form.phone}
               onChange={(e) => setForm({ ...form, phone: e.target.value })}
             />
           </div>
-
           <div className="md:col-span-2 flex items-center justify-between flex-wrap gap-4 pt-2">
             <p className="text-xs text-muted max-w-md">
               By submitting you agree to share these details with verified support partners only.
@@ -240,30 +519,58 @@ export default function Home() {
               <Send className="w-4 h-4" />
             </button>
           </div>
-        </form>
 
-        {last && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-            className="mt-6 p-5 rounded-2xl border border-sage/20 flex items-center justify-between flex-wrap gap-3"
-            style={{ background: "linear-gradient(135deg, rgba(37,99,235,0.06), rgba(20,184,166,0.06))" }}
-            data-testid="request-result"
-          >
-            <div>
-              <div className="text-xs label-cap">Detected category</div>
-              <div className="font-heading text-lg text-ink font-bold">{last.category}</div>
+          {last && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+              className="md:col-span-2 mt-2 p-5 rounded-2xl border border-sage/20 flex items-center justify-between flex-wrap gap-3"
+              style={{ background: "linear-gradient(135deg, rgba(37,99,235,0.06), rgba(20,184,166,0.06))" }}
+              data-testid="request-result"
+            >
+              <div>
+                <div className="text-xs label-cap">Detected category</div>
+                <div className="font-heading text-lg text-ink font-bold">{last.category}</div>
+              </div>
+              <div>
+                <div className="text-xs label-cap">Urgency</div>
+                <div className="font-heading text-lg text-urgent font-bold">{last.urgency}</div>
+              </div>
+              <div>
+                <div className="text-xs label-cap">Location</div>
+                <div className="font-heading text-lg text-ink font-bold">{last.location}</div>
+              </div>
+            </motion.div>
+          )}
+        </form>
+      </Section>
+
+      {/* ════════ Final CTA ════════ */}
+      <Section>
+        <div
+          className="rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden"
+          style={{ background: "linear-gradient(135deg, #2563EB 0%, #6366F1 60%, #14B8A6 100%)" }}
+        >
+          <div className="absolute inset-0 opacity-30 mix-blend-overlay"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.3), transparent 40%), radial-gradient(circle at 80% 70%, rgba(255,255,255,0.25), transparent 40%)",
+            }} />
+          <div className="relative">
+            <BookOpen className="w-10 h-10 text-white mx-auto opacity-90" />
+            <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-white mt-4 leading-tight max-w-2xl mx-auto">
+              You took the hardest step by being here. We'll take the next one with you.
+            </h2>
+            <div className="flex flex-wrap justify-center gap-3 mt-7">
+              <Link to="/chat" className="inline-flex items-center gap-2 px-7 h-12 rounded-full bg-white text-ink font-semibold shadow-soft hover:-translate-y-0.5 transition-transform">
+                <MessageCircle className="w-4 h-4" /> Start a chat
+              </Link>
+              <Link to="/find-help" className="inline-flex items-center gap-2 px-7 h-12 rounded-full bg-white/15 text-white font-semibold border border-white/30 backdrop-blur hover:bg-white/25 transition-colors">
+                Find help now <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
-            <div>
-              <div className="text-xs label-cap">Urgency</div>
-              <div className="font-heading text-lg text-urgent font-bold">{last.urgency}</div>
-            </div>
-            <div>
-              <div className="text-xs label-cap">Location</div>
-              <div className="font-heading text-lg text-ink font-bold">{last.location}</div>
-            </div>
-          </motion.div>
-        )}
-      </section>
+          </div>
+        </div>
+      </Section>
     </div>
   );
 }

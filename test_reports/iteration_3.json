@@ -1,0 +1,25 @@
+{
+  "summary": "Iter 3 testing complete. Backend 18/18 PASS (added google-session 401 + empty session_id 400 tests). Frontend: Google login button visible, click redirects to https://auth.emergentagent.com/?redirect=<origin>/. Home page: all 7 sections render in order (Hero, Quick Actions x4, Support Categories x6, AI Chat showcase, How It Works, Impact/Trust + Final CTA, Request Help form). All hero CTAs (cta-find-help-now -> /find-help, cta-talk-to-ai -> /chat), Quick Actions (qa-find-help, qa-start-chat, qa-emergency, qa-resources), and 6 Support Category buttons (Food/Medical/Financial/Shelter/Mental Health/Education) navigate correctly to /find-help?q=<term>. /find-help?q=food prepopulates 'food' in find-need input. Search returns 6 org cards each with a working Share button (data-testid='org-share-btn') that invokes navigator.share. AuthCallback with #session_id=invalid (logged-out) calls POST /api/auth/google-session, gets 401, and redirects to /login. Auth-guard fix verified: unauth /chat -> /login. Signup-success overlay HIGH-priority issue from iter 2 is FIXED — overlay observed via MutationObserver during fresh signup. Floating-AI HIGH-priority overlap issue from iter 2 is FIXED — FAB moved to bottom-left z-[60], visible and clickable, navigates to /chat without overlay interception.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "AuthCallback (already-authenticated user with bad session_id)", "issues": ["When a logged-in user lands on /#session_id=invalid, AuthCallback receives 401 and calls nav('/login'), but PublicOnly then redirects them to '/' since they're already authed. Net result: user stays on home (no error toast surfaced). Acceptable for a user already logged in, but slightly inconsistent with spec wording. Logged-out path (the realistic one) works correctly."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/backend_test.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Support Category buttons in Home.jsx have no data-testids (e.g. cat-food, cat-medical). Spec listed these — currently the SupportCategory component only adds a generic class. Add testids like data-testid={`cat-${queryTag.split(' ')[0]}`} for stable category-level testing.",
+    "AuthCallback: when an already-authenticated user revisits with a bad session_id, the error toast is masked by the immediate PublicOnly->'/' redirect after nav('/login'). Consider clearing localStorage cc_token/cc_user + calling logout() in the catch branch before nav('/login') so PublicOnly doesn't immediately bounce back."
+  ],
+  "updated_files": ["/app/backend/tests/backend_test.py"],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "test@example.com / Pass1234! (existing). New TEST signup users created during automated runs (signup+<ts>@example.com).",
+  "seed_data_creation": "1 new TEST user created via automated signup.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "All 18 backend tests stable. Frontend redesigned home page works end-to-end. Google OAuth click-redirect verified (full OAuth not exercised). Signup-success overlay and FAB overlap (both prior HIGH issues) are both FIXED. Only minor improvements remaining: add cat-* data-testids to SupportCategory buttons, and refine AuthCallback error handling for the rare already-authed-with-bad-session case.",
+  "rca of the issue": "Already-authed AuthCallback nuance: AppRouter detects '#session_id=' and renders <AuthCallback/>. AuthCallback POSTs to /api/auth/google-session, gets 401, calls toast.error + nav('/login'). However if the user was already logged in (token in localStorage, useAuth user is set), <Route path='/login'> is wrapped in <PublicOnly> which Navigates to '/' immediately, so the toast may be unmounted before showing. Fix: call auth.logout() before nav('/login') in the catch block, or render an error state in AuthCallback for ~1.5s before navigating."
+}

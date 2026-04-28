@@ -1,15 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { MapPin, Search, Phone, ExternalLink, Star, Zap, Plus, Locate } from "lucide-react";
+import { MapPin, Search, Phone, ExternalLink, Star, Zap, Plus, Locate, Share2 } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { api } from "../lib/api";
 
 export default function FindHelp() {
-  const [need, setNeed] = useState("");
+  const [params] = useSearchParams();
+  const [need, setNeed] = useState(params.get("q") || "");
   const [location, setLocation] = useState("");
   const [count, setCount] = useState(6);
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState(null);
+
+  // If we arrived from Home with ?q=food (etc.), gently prompt the user about location
+  useEffect(() => {
+    if (params.get("q") && !location) {
+      // no auto-search; user needs to enter location
+    }
+  }, [params, location]);
 
   const detectLocation = async () => {
     try {
@@ -40,6 +49,29 @@ export default function FindHelp() {
   const loadMore = async () => {
     setCount((c) => c + 4);
     await search();
+  };
+
+  const shareOrg = async (org) => {
+    const text =
+      `🤝 Found help on CareConnect:\n\n` +
+      `${org.name}\n📍 ${org.location}\n` +
+      (org.contact ? `📞 ${org.contact}\n` : "") +
+      `\n${org.description}\n\nMap: ${org.maps_link}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: org.name, text, url: org.maps_link });
+        return;
+      } catch (e) {
+        if (e?.name === "AbortError") return; // user cancelled
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success("Copied — share it with someone who needs it.");
+    } catch {
+      toast.error("Could not share or copy");
+    }
   };
 
   return (
@@ -131,10 +163,20 @@ export default function FindHelp() {
                         <Phone className="w-3.5 h-3.5" /> {o.contact.length > 18 ? o.contact.slice(0, 18) + "…" : o.contact}
                       </a>
                     )}
-                    <a href={o.maps_link} target="_blank" rel="noreferrer"
-                       className="inline-flex items-center gap-1 text-sm text-sage hover:text-sage-hover font-medium">
-                      Map <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => shareOrg(o)}
+                        data-testid="org-share-btn"
+                        className="inline-flex items-center gap-1 text-sm text-terracotta-hover hover:text-terracotta font-semibold"
+                        title="Share with a friend"
+                      >
+                        <Share2 className="w-3.5 h-3.5" /> Share
+                      </button>
+                      <a href={o.maps_link} target="_blank" rel="noreferrer"
+                         className="inline-flex items-center gap-1 text-sm text-sage hover:text-sage-hover font-semibold">
+                        Map <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                    </div>
                   </div>
                 </div>
               </motion.article>

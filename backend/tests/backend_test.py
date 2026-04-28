@@ -49,6 +49,16 @@ def test_login_invalid(session):
     r = session.post(f"{API}/auth/login", json={"email": UNIQUE_EMAIL, "password": "wrong"})
     assert r.status_code == 401
 
+# Google social login - bad session_id should yield 401
+def test_google_session_invalid(session):
+    r = session.post(f"{API}/auth/google-session", json={"session_id": "invalid-fake-session"}, timeout=20)
+    assert r.status_code == 401, f"expected 401 got {r.status_code} body={r.text[:200]}"
+
+def test_google_session_empty(session):
+    r = session.post(f"{API}/auth/google-session", json={"session_id": ""}, timeout=20)
+    # empty session_id triggers validation -> 400
+    assert r.status_code in (400, 422), f"expected 400/422 got {r.status_code}"
+
 def test_me(session, auth):
     r = session.get(f"{API}/auth/me", headers={"Authorization": f"Bearer {auth['token']}"})
     assert r.status_code == 200

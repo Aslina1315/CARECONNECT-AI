@@ -244,6 +244,61 @@ async def login(body: LoginIn):
                      phone=user.get("phone", ""), location=user.get("location", "")),
     )
 
+
+# Google social login — exchanges Emergent session_id, finds/creates user, returns JWT.
+# REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
+class GoogleSessionIn(BaseModel):
+    session_id: str
+
+@api.post("/auth/google-session", response_model=TokenOut)
+async def google_session(body: GoogleSessionIn):
+    if not body.session_id:
+        raise HTTPException(status_code=400, detail="session_id required")
+    import requests as _requests
+    try:
+        r = _requests.get(
+            "https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data",
+            headers={"X-Session-ID": body.session_id},
+            timeout=10,
+        )
+    except Exception as e:
+        logger.warning(f"Emergent session lookup failed: {e}")
+        raise HTTPException(status_code=502, detail="Auth provider unreachable")
+    if r.status_code != 200:
+        raise HTTPException(status_code=401, detail="Invalid or expired session")
+    data = r.json()
+    email = (data.get("email") or "").lower()
+    name = data.get("name") or ""
+    picture = data.get("picture") or ""
+    if not email:
+        raise HTTPException(status_code=401, detail="No email from provider")
+
+    user = await db.users.find_one({"email": email}, {"_id": 0})
+    if not user:
+        user_id = str(uuid.uuid4())
+        user = {
+            "id": user_id,
+            "name": name or email.split("@")[0],
+            "email": email,
+            "password": "",
+            "phone": "",
+            "location": "",
+            "picture": picture,
+            "settings": {"notifications": True, "dark_mode": False, "save_activity": True},
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "auth_provider": "google",
+        }
+        await db.users.insert_one(user.copy())
+    elif picture and not user.get("picture"):
+        await db.users.update_one({"id": user["id"]}, {"$set": {"picture": picture}})
+
+    token = create_token(user["id"])
+    return TokenOut(
+        token=token,
+        user=UserOut(id=user["id"], name=user["name"], email=user["email"],
+                     phone=user.get("phone", ""), location=user.get("location", "")),
+    )
+
 @api.get("/auth/me", response_model=UserOut)
 async def me(user=Depends(get_current_user)):
     return UserOut(**{k: user.get(k, "") for k in ["id", "name", "email", "phone", "location"]})
