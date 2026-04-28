@@ -13,13 +13,13 @@ export default function Logo({ size = 40, withText = true, className = "" }) {
         style={{
           width: size,
           height: size,
-          background: "linear-gradient(135deg, #E11D48 0%, #F43F5E 50%, #F59E0B 100%)",
-          boxShadow: "0 10px 30px rgba(225, 29, 72, 0.35)",
+          background: "linear-gradient(135deg, #6B8E7F 0%, #94B0A2 50%, #D9B89C 100%)",
+          boxShadow: "0 10px 30px rgba(107, 142, 127, 0.35)",
         }}
       >
         <motion.span
           className="absolute inset-0 rounded-2xl"
-          style={{ background: "linear-gradient(135deg, #E11D48, #F59E0B)" }}
+          style={{ background: "linear-gradient(135deg, #6B8E7F, #D9B89C)" }}
           animate={{ scale: [1, 1.18, 1], opacity: [0.6, 0, 0.6] }}
           transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
         />

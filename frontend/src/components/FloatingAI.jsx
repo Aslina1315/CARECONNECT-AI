@@ -29,17 +29,17 @@ export default function FloatingAI() {
         data-testid="floating-ai-btn"
         className="relative w-16 h-16 rounded-full flex items-center justify-center text-white shadow-hover transition-transform hover:-translate-y-1 active:scale-95"
         style={{
-          background: "linear-gradient(135deg, #E11D48 0%, #F43F5E 50%, #F59E0B 100%)",
+          background: "linear-gradient(135deg, #6B8E7F 0%, #94B0A2 50%, #D9B89C 100%)",
         }}
         aria-label="Talk to AI"
       >
         <span
           className="absolute inset-0 rounded-full"
-          style={{ background: "linear-gradient(135deg, #E11D48, #F59E0B)", opacity: 0.5, animation: "pulse-ring 2.4s ease-out infinite" }}
+          style={{ background: "linear-gradient(135deg, #6B8E7F, #D9B89C)", opacity: 0.5, animation: "pulse-ring 2.4s ease-out infinite" }}
         />
         <span
           className="absolute inset-0 rounded-full"
-          style={{ background: "linear-gradient(135deg, #F43F5E, #F59E0B)", opacity: 0.4, animation: "pulse-ring 2.4s ease-out 0.7s infinite" }}
+          style={{ background: "linear-gradient(135deg, #94B0A2, #D9B89C)", opacity: 0.4, animation: "pulse-ring 2.4s ease-out 0.7s infinite" }}
         />
         <MessageCircle className="relative w-6 h-6" strokeWidth={2.4} />
       </button>

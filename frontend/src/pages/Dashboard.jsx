@@ -4,7 +4,7 @@ import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell, Tooltip } from 
 import { TrendingUp, Users, Link2, AlertTriangle, Activity, Globe2 } from "lucide-react";
 import { api } from "../lib/api";
 
-const COLORS = ["#E11D48", "#F59E0B", "#B45309", "#DC2626", "#F43F5E", "#92400E"];
+const COLORS = ["#6B8E7F", "#D9B89C", "#94785A", "#C2483A", "#94B0A2", "#5C4633"];
 
 const Metric = ({ icon: Icon, label, value, hue, idx }) => (
   <motion.div
@@ -83,7 +83,7 @@ export default function Dashboard() {
                 <Tooltip cursor={{ fill: "rgba(224,122,95,0.08)" }} contentStyle={{ borderRadius: 12, border: "1px solid #E8E5DF" }} />
                 <Bar dataKey="value" radius={[12, 12, 0, 0]}>
                   {urgencyData.map((u, i) => (
-                    <Cell key={i} fill={u.name === "HIGH" ? "#DC2626" : u.name === "MEDIUM" ? "#F59E0B" : "#16A34A"} />
+                    <Cell key={i} fill={u.name === "HIGH" ? "#C2483A" : u.name === "MEDIUM" ? "#D9B89C" : "#5B8A75"} />
                   ))}
                 </Bar>
               </BarChart>

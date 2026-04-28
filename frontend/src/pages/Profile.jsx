@@ -64,12 +64,12 @@ export default function Profile() {
       >
         <div
           className="absolute -top-10 -right-10 w-40 h-40 rounded-full blur-3xl opacity-30"
-          style={{ background: "linear-gradient(135deg, #E11D48, #F59E0B)" }}
+          style={{ background: "linear-gradient(135deg, #6B8E7F, #D9B89C)" }}
         />
         <div className="relative inline-block">
           <div
             className="relative w-32 h-32 mx-auto rounded-full p-1"
-            style={{ background: "linear-gradient(135deg, #E11D48, #F59E0B)" }}
+            style={{ background: "linear-gradient(135deg, #6B8E7F, #D9B89C)" }}
           >
             {form.picture ? (
               <img
@@ -90,7 +90,7 @@ export default function Profile() {
             onClick={() => fileRef.current?.click()}
             data-testid="profile-avatar-edit"
             className="absolute bottom-1 right-1 w-10 h-10 rounded-full text-white flex items-center justify-center shadow-soft hover:-translate-y-0.5 transition-transform"
-            style={{ background: "linear-gradient(135deg, #E11D48, #F59E0B)" }}
+            style={{ background: "linear-gradient(135deg, #6B8E7F, #D9B89C)" }}
             title="Change photo"
           >
             <Camera className="w-4 h-4" />

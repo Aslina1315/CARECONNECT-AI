@@ -51,8 +51,8 @@ export default function Navbar() {
                 }`
               }
               style={({ isActive }) => isActive ? {
-                background: "linear-gradient(135deg, #E11D48 0%, #F59E0B 100%)",
-                boxShadow: "0 8px 22px rgba(225, 29, 72, 0.32)",
+                background: "linear-gradient(135deg, #6B8E7F 0%, #D9B89C 100%)",
+                boxShadow: "0 8px 22px rgba(107, 142, 127, 0.32)",
               } : {}}
             >
               <Icon className="w-4 h-4" />
@@ -75,7 +75,7 @@ export default function Navbar() {
             ) : (
               <div
                 className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-white text-xs"
-                style={{ background: "linear-gradient(135deg, #E11D48, #F59E0B)" }}
+                style={{ background: "linear-gradient(135deg, #6B8E7F, #D9B89C)" }}
               >
                 {user?.name?.[0]?.toUpperCase() || "U"}
               </div>
@@ -121,7 +121,7 @@ export default function Navbar() {
                 }`
               }
               style={({ isActive }) => isActive ? {
-                background: "linear-gradient(135deg, #E11D48, #F59E0B)",
+                background: "linear-gradient(135deg, #6B8E7F, #D9B89C)",
               } : {}}
             >
               <Icon className="w-4 h-4" />

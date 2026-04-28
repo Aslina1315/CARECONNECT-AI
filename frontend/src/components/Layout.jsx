@@ -8,11 +8,11 @@ export default function Layout({ children }) {
     <div className="relative min-h-screen overflow-x-hidden">
       {/* Warm decorative blobs — rose + amber + saddle */}
       <div className="blob w-[460px] h-[460px] -top-32 -left-24 animate-blob"
-        style={{ background: "rgba(225, 29, 72, 0.32)" }} />
+        style={{ background: "rgba(107, 142, 127, 0.32)" }} />
       <div className="blob w-[520px] h-[520px] top-40 -right-32 animate-blob"
-        style={{ background: "rgba(245, 158, 11, 0.32)", animationDelay: "3s" }} />
+        style={{ background: "rgba(217, 184, 156, 0.32)", animationDelay: "3s" }} />
       <div className="blob w-[400px] h-[400px] bottom-0 left-1/3 animate-blob"
-        style={{ background: "rgba(180, 83, 9, 0.22)", animationDelay: "6s" }} />
+        style={{ background: "rgba(148, 120, 90, 0.22)", animationDelay: "6s" }} />
 
       <Navbar />
 

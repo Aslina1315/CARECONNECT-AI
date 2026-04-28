@@ -51,7 +51,7 @@ export default function Chat() {
           <img src={HEADER_IMAGE} alt="" className="absolute inset-0 w-full h-full object-cover" />
           <div
             className="absolute inset-0"
-            style={{ background: "linear-gradient(135deg, rgba(225,29,72,0.78) 0%, rgba(244,63,94,0.65) 50%, rgba(245,158,11,0.78) 100%)" }}
+            style={{ background: "linear-gradient(135deg, rgba(107,142,127,0.85) 0%, rgba(148,176,162,0.72) 55%, rgba(217,184,156,0.78) 100%)" }}
           />
           <div className="relative h-full flex items-center gap-4 px-6">
             <motion.div
@@ -60,7 +60,7 @@ export default function Chat() {
               className="w-16 h-16 rounded-2xl bg-white/95 flex items-center justify-center shadow-soft"
               data-testid="chat-bot-avatar"
             >
-              <HeartHandshake className="w-8 h-8" style={{ color: "#E11D48" }} strokeWidth={2.2} />
+              <HeartHandshake className="w-8 h-8" style={{ color: "#6B8E7F" }} strokeWidth={2.2} />
             </motion.div>
             <div className="text-white">
               <div className="font-heading text-2xl font-bold leading-tight">CareConnect Assistant</div>
@@ -87,7 +87,7 @@ export default function Chat() {
                 animate={{ y: [0, -6, 0] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                 className="w-24 h-24 mx-auto rounded-3xl flex items-center justify-center text-white shadow-soft"
-                style={{ background: "linear-gradient(135deg, #E11D48, #F59E0B)" }}
+                style={{ background: "linear-gradient(135deg, #6B8E7F, #D9B89C)" }}
               >
                 <HeartHandshake className="w-10 h-10" />
               </motion.div>
@@ -119,7 +119,7 @@ export default function Chat() {
                 {m.role === "assistant" && (
                   <div
                     className="w-9 h-9 rounded-full flex items-center justify-center text-white flex-shrink-0"
-                    style={{ background: "linear-gradient(135deg, #E11D48, #F59E0B)" }}
+                    style={{ background: "linear-gradient(135deg, #6B8E7F, #D9B89C)" }}
                   >
                     <Bot className="w-4 h-4" />
                   </div>
@@ -156,7 +156,7 @@ export default function Chat() {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-3">
               <div
                 className="w-9 h-9 rounded-full flex items-center justify-center text-white"
-                style={{ background: "linear-gradient(135deg, #E11D48, #F59E0B)" }}
+                style={{ background: "linear-gradient(135deg, #6B8E7F, #D9B89C)" }}
               >
                 <Bot className="w-4 h-4" />
               </div>
@@ -195,7 +195,7 @@ export default function Chat() {
       <aside className="space-y-4">
         <div className="glass-card p-6 relative overflow-hidden">
           <div className="absolute -top-6 -right-6 w-28 h-28 rounded-full opacity-30 blur-2xl"
-            style={{ background: "linear-gradient(135deg, #DC2626, #F59E0B)" }} />
+            style={{ background: "linear-gradient(135deg, #DC2626, #D9B89C)" }} />
           <h3 className="font-heading text-lg font-bold text-ink relative flex items-center gap-2">
             <Phone className="w-4 h-4 text-urgent" /> Crisis lines
           </h3>
@@ -208,7 +208,7 @@ export default function Chat() {
         </div>
         <div className="glass-card p-6 relative overflow-hidden">
           <div className="absolute -top-6 -right-6 w-28 h-28 rounded-full opacity-30 blur-2xl"
-            style={{ background: "linear-gradient(135deg, #F59E0B, #E11D48)" }} />
+            style={{ background: "linear-gradient(135deg, #D9B89C, #6B8E7F)" }} />
           <h3 className="font-heading text-lg font-bold text-ink relative">Tip</h3>
           <p className="text-sm text-muted mt-1 leading-relaxed relative">
             After chatting, head to <span className="text-sage font-bold">Find Help</span> — we'll suggest organizations near you.

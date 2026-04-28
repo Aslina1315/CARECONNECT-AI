@@ -178,7 +178,7 @@ export default function Home() {
           >
             <div className="glass-card p-8 relative overflow-hidden">
               <div className="absolute -top-4 -right-4 w-32 h-32 rounded-full opacity-50 blur-2xl"
-                style={{ background: "linear-gradient(135deg, #E11D48, #F59E0B)" }} />
+                style={{ background: "linear-gradient(135deg, #6B8E7F, #D9B89C)" }} />
               <div className="space-y-6 relative">
                 <div className="flex items-center justify-between">
                   <div>
@@ -187,7 +187,7 @@ export default function Home() {
                     <div className="text-sm text-muted">people helped this month</div>
                   </div>
                   <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white animate-float shadow-soft"
-                    style={{ background: "linear-gradient(135deg, #E11D48, #F59E0B)" }}>
+                    style={{ background: "linear-gradient(135deg, #6B8E7F, #D9B89C)" }}>
                     <HeartHandshake className="w-6 h-6" />
                   </div>
                 </div>
@@ -227,16 +227,16 @@ export default function Home() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           <QuickAction to="/find-help" testid="qa-find-help" Icon={Search}
             title="Find help" desc="Discover verified organizations near you."
-            gradient="linear-gradient(135deg, #E11D48, #F43F5E)" accent="#E11D48" />
+            gradient="linear-gradient(135deg, #6B8E7F, #94B0A2)" accent="#6B8E7F" />
           <QuickAction to="/chat" testid="qa-start-chat" Icon={MessageCircle}
             title="Start a chat" desc="Talk to our caring AI in private."
-            gradient="linear-gradient(135deg, #F59E0B, #F43F5E)" accent="#D97706" />
+            gradient="linear-gradient(135deg, #D9B89C, #94B0A2)" accent="#BFA083" />
           <QuickAction to="/chat" testid="qa-emergency" Icon={AlertTriangle}
             title="Emergency" desc="Crisis lines and urgent helpline numbers."
-            gradient="linear-gradient(135deg, #DC2626, #F97316)" accent="#DC2626" />
+            gradient="linear-gradient(135deg, #DC2626, #D9B89C)" accent="#DC2626" />
           <QuickAction to="/dashboard" testid="qa-resources" Icon={Compass}
             title="Explore" desc="Browse insights and your past requests."
-            gradient="linear-gradient(135deg, #B45309, #F59E0B)" accent="#B45309" />
+            gradient="linear-gradient(135deg, #94785A, #D9B89C)" accent="#94785A" />
         </div>
       </section>
 
@@ -250,22 +250,22 @@ export default function Home() {
         <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
           <SupportCategory idx={0} Icon={Heart} title="Food support" queryTag="food"
             description="Free meals, food banks, and grocery aid for individuals and families."
-            gradient="linear-gradient(135deg, #DC2626, #F59E0B)" />
+            gradient="linear-gradient(135deg, #DC2626, #D9B89C)" />
           <SupportCategory idx={1} Icon={Stethoscope} title="Medical aid" queryTag="medical"
             description="Free clinics, prescription help, and emergency medical assistance."
-            gradient="linear-gradient(135deg, #E11D48, #F43F5E)" />
+            gradient="linear-gradient(135deg, #6B8E7F, #94B0A2)" />
           <SupportCategory idx={2} Icon={Wallet} title="Financial help" queryTag="financial"
             description="Rent, bills, debt counseling, and emergency cash assistance."
-            gradient="linear-gradient(135deg, #F59E0B, #B45309)" />
+            gradient="linear-gradient(135deg, #D9B89C, #94785A)" />
           <SupportCategory idx={3} Icon={HomeIcon} title="Shelter" queryTag="shelter housing"
             description="Safe overnight stays, transitional housing, and domestic-violence havens."
-            gradient="linear-gradient(135deg, #B45309, #F59E0B)" />
+            gradient="linear-gradient(135deg, #94785A, #D9B89C)" />
           <SupportCategory idx={4} Icon={BrainCircuit} title="Mental health" queryTag="mental health"
             description="Therapy, peer support, and 24/7 crisis lines."
-            gradient="linear-gradient(135deg, #E11D48, #B45309)" />
+            gradient="linear-gradient(135deg, #6B8E7F, #94785A)" />
           <SupportCategory idx={5} Icon={GraduationCap} title="Education" queryTag="education scholarship"
             description="Scholarships, tuition aid, mentorship, and skill programs."
-            gradient="linear-gradient(135deg, #F43F5E, #F59E0B)" />
+            gradient="linear-gradient(135deg, #94B0A2, #D9B89C)" />
         </div>
       </section>
 
@@ -287,7 +287,7 @@ export default function Home() {
               ].map(({ Icon, t, d }) => (
                 <li key={t} className="flex items-start gap-3">
                   <span className="w-9 h-9 rounded-2xl flex items-center justify-center text-white flex-shrink-0 shadow-soft"
-                    style={{ background: "linear-gradient(135deg, #E11D48, #F59E0B)" }}>
+                    style={{ background: "linear-gradient(135deg, #6B8E7F, #D9B89C)" }}>
                     <Icon className="w-4 h-4" />
                   </span>
                   <div>
@@ -304,10 +304,10 @@ export default function Home() {
 
           <div className="glass-card p-6 sm:p-7 relative overflow-hidden">
             <div className="absolute -top-12 -right-12 w-44 h-44 rounded-full opacity-30 blur-3xl"
-              style={{ background: "linear-gradient(135deg, #E11D48, #F59E0B)" }} />
+              style={{ background: "linear-gradient(135deg, #6B8E7F, #D9B89C)" }} />
             <div className="flex items-center gap-3 pb-4 border-b border-line/70 relative">
               <div className="w-10 h-10 rounded-full flex items-center justify-center text-white shadow-soft"
-                style={{ background: "linear-gradient(135deg, #E11D48, #F59E0B)" }}>
+                style={{ background: "linear-gradient(135deg, #6B8E7F, #D9B89C)" }}>
                 <HeartHandshake className="w-5 h-5" />
               </div>
               <div>
@@ -329,7 +329,7 @@ export default function Home() {
                 >
                   {m.role === "ai" && (
                     <div className="w-7 h-7 rounded-full flex items-center justify-center text-white flex-shrink-0"
-                      style={{ background: "linear-gradient(135deg, #E11D48, #F59E0B)" }}>
+                      style={{ background: "linear-gradient(135deg, #6B8E7F, #D9B89C)" }}>
                       <Bot className="w-3.5 h-3.5" />
                     </div>
                   )}
@@ -353,7 +353,7 @@ export default function Home() {
                 className="flex justify-start gap-2.5"
               >
                 <div className="w-7 h-7 rounded-full flex items-center justify-center text-white flex-shrink-0"
-                  style={{ background: "linear-gradient(135deg, #E11D48, #F59E0B)" }}>
+                  style={{ background: "linear-gradient(135deg, #6B8E7F, #D9B89C)" }}>
                   <Bot className="w-3.5 h-3.5" />
                 </div>
                 <div className="bg-sage/10 px-4 py-3 rounded-2xl flex items-center gap-1.5">
@@ -390,10 +390,10 @@ export default function Home() {
               className="glass-card p-7 relative overflow-hidden"
             >
               <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full opacity-25 blur-2xl"
-                style={{ background: "linear-gradient(135deg, #E11D48, #F59E0B)" }} />
+                style={{ background: "linear-gradient(135deg, #6B8E7F, #D9B89C)" }} />
               <div className="flex items-start justify-between relative">
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-soft"
-                  style={{ background: "linear-gradient(135deg, #E11D48, #F59E0B)" }}>
+                  style={{ background: "linear-gradient(135deg, #6B8E7F, #D9B89C)" }}>
                   <Icon className="w-5 h-5" />
                 </div>
                 <span className="font-heading text-3xl font-bold text-sage/30 leading-none">{n}</span>
@@ -409,9 +409,9 @@ export default function Home() {
       <section data-testid="impact-section" className="relative">
         <div className="glass-card p-8 sm:p-12 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-72 h-72 rounded-full opacity-25 blur-3xl"
-            style={{ background: "linear-gradient(135deg, #E11D48, #F43F5E)" }} />
+            style={{ background: "linear-gradient(135deg, #6B8E7F, #94B0A2)" }} />
           <div className="absolute bottom-0 right-0 w-72 h-72 rounded-full opacity-25 blur-3xl"
-            style={{ background: "linear-gradient(135deg, #F59E0B, #B45309)" }} />
+            style={{ background: "linear-gradient(135deg, #D9B89C, #94785A)" }} />
 
           <div className="relative">
             <span className="pill bg-white/85 backdrop-blur border border-success/35 text-success">
@@ -427,9 +427,9 @@ export default function Home() {
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-10">
               {[
-                { Icon: Users, n: "12.4K+", l: "People helped this month", c: "#E11D48" },
-                { Icon: Clock, n: "<2 min", l: "Average match time", c: "#F59E0B" },
-                { Icon: MapPin, n: "850+", l: "Verified organizations", c: "#B45309" },
+                { Icon: Users, n: "12.4K+", l: "People helped this month", c: "#6B8E7F" },
+                { Icon: Clock, n: "<2 min", l: "Average match time", c: "#D9B89C" },
+                { Icon: MapPin, n: "850+", l: "Verified organizations", c: "#94785A" },
                 { Icon: Heart, n: "98%", l: "Reported feeling heard", c: "#DC2626" },
               ].map(({ Icon, n, l, c }, i) => (
                 <motion.div
@@ -504,7 +504,7 @@ export default function Home() {
             <motion.div
               initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
               className="md:col-span-2 mt-2 p-5 rounded-2xl border border-sage/25 flex items-center justify-between flex-wrap gap-3"
-              style={{ background: "linear-gradient(135deg, rgba(225,29,72,0.06), rgba(245,158,11,0.06))" }}
+              style={{ background: "linear-gradient(135deg, rgba(107,142,127,0.06), rgba(217,184,156,0.06))" }}
               data-testid="request-result"
             >
               <div>
@@ -530,7 +530,7 @@ export default function Home() {
       <section data-testid="final-cta-section">
         <div
           className="rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden"
-          style={{ background: "linear-gradient(135deg, #E11D48 0%, #F43F5E 50%, #F59E0B 100%)" }}
+          style={{ background: "linear-gradient(135deg, #6B8E7F 0%, #94B0A2 50%, #D9B89C 100%)" }}
         >
           <div className="absolute inset-0 opacity-30 mix-blend-overlay"
             style={{
