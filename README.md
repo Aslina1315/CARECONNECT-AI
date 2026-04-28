@@ -31,7 +31,7 @@ It analyzes user input, classifies urgency, and recommends the most relevant hel
 
 ## 🛠️ Tech Stack
 - **Frontend:** Streamlit  
-- **Backend:** Python  
+- **Backend:** Python 
 - **AI Models:** Gemini API, Groq (LLM)  
 - **Database:** JSON-based storage  
 - **Visualization:** Streamlit charts  
