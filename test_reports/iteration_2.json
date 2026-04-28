@@ -1,0 +1,33 @@
+{
+  "summary": "Iter 2 retest: backend 16/16 pass. Auth-guard fix VERIFIED (logout->/login, /chat&/dashboard while unauthenticated->/login). Two new HIGH issues found: (a) signup-success overlay never visible to user — auth.signup() sets user before overlay renders, causing PublicOnly to immediately Navigate('/'); (b) Floating AI button is unclickable on Home/FindHelp/Dashboard/Profile/Settings because the 'Made with Emergent' badge overlays bottom-right and intercepts pointer events even with force-click. Other UI flows (login, navbar, find-help, dashboard, profile/settings save, chat) work correctly.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "Login.jsx + lib/auth.jsx", "issue": "data-testid='signup-success' overlay never appears to user. Polled 6s @100ms after submit on a fresh signup — never visible. Root cause: auth.signup() calls setUser(data.user) immediately, which causes <PublicOnly> in App.js to render <Navigate to='/' replace/> and unmount Login BEFORE setSuccess(true)/setTimeout fires. Toast still shows but the green-checkmark overlay specified in the spec is never rendered.", "selector": "[data-testid='signup-success']", "priority": "HIGH"},
+      {"component": "FloatingAI.jsx (z-index conflict with Emergent badge)", "issue": "floating-ai-btn at fixed bottom-6 right-6 z-50 is occluded by the 'Made with Emergent' anchor (#emergent-badge) which sits at the same bottom-right corner with a higher stacking context. Playwright reports 'emergent-badge intercepts pointer events' on normal click; even force=True click does not result in navigation to /chat. Real users on desktop will not be able to use the FAB.", "selector": "[data-testid='floating-ai-btn']", "priority": "HIGH"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Dashboard", "issues": ["Recharts ResponsiveContainer logs warning: 'width(-1) and height(-1) of chart should be greater than 0' — chart container has no minHeight/aspect set; charts may render with 0 size on first paint."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/backend_test.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "FIX signup-success: either (a) move setUser to AFTER setSuccess+setTimeout in Login.onSubmit (don't call helper that auto-sets user), or (b) make Login.signup helper return token/user without committing them to context, then commit + navigate after the 1.4s success state. A simple fix: in Login.jsx onSubmit, call api.post('/auth/signup') directly, store token/user in localStorage, show success state, then call updateUser(...) + nav('/') after 1.4s.",
+    "FIX floating-ai-btn overlap: shift the FAB to bottom-24 (or right-24) on desktop, OR add `pointer-events:auto` with much higher z-index (z-[60]+), AND/OR move it to bottom-left so it doesn't collide with the Emergent badge bottom-right.",
+    "Add minHeight to Recharts ResponsiveContainer wrappers on Dashboard to silence width/height(-1) warning."
+  ],
+  "critical_code_review_comments": [
+    "lib/auth.jsx signup() and login() both setUser immediately — fine for login (PublicOnly redirects to '/' which is the desired post-login destination) but breaks the new signup-success UX requirement. Decouple auth-context commit from the signup API call so UI can show transient success.",
+    "Protected wrapper has both useEffect(nav('/login')) and <Navigate to='/login' replace/> — the Navigate is sufficient; the useEffect is redundant once children unmount on Navigate. Harmless but worth simplifying.",
+    "FloatingAI.jsx hardcodes z-50 — should be z-[55] or higher to coexist with Emergent badge."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100%", "frontend": "75%"},
+  "test_credentials": "test@example.com / Pass1234! (existing). Created during this run: signup+<ts>@example.com / Pass1234!",
+  "seed_data_creation": "Two new TEST users created via signup during automated runs (signup+<timestamp>@example.com).",
+  "retest_needed": true,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Backend 16/16 stable - no need to re-run unless server.py changes. Focus retest on: (1) signup-success overlay actually rendering for ~1.4s on a fresh signup (poll [data-testid='signup-success'] for visible:true), (2) floating-ai-btn navigates to /chat on a normal click (no force) on Home page. Existing user test@example.com / Pass1234! works for login. Auth-guard fix is verified — no need to retest.",
+  "rca of the issue": "signup-success overlay race: lib/auth.jsx#signup() does setUser(data.user) synchronously after API resolves. App.js <PublicOnly> reads user via useAuth() and on the next render returns <Navigate to='/' replace/>, unmounting <Login/>. Login.onSubmit's subsequent setSuccess(true) and setTimeout never get a chance to paint the [data-testid=signup-success] overlay because Login is already gone. Mitigation: in Login.onSubmit, do not call auth.signup() helper directly. Instead call the API yourself, store token/user, render success state for 1.4s, then call updateUser(user) + nav('/'). Alternatively introduce a 'signupPending' flag in auth context that PublicOnly respects (don't redirect if signupPending is true). FAB overlap RCA: Emergent injected badge anchor has its own stacking context at bottom-right with z>50; floating button sits beneath it; Playwright correctly reports 'emergent-badge intercepts pointer events'."
+}

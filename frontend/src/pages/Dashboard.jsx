@@ -9,7 +9,7 @@ const COLORS = ["#5E8B7E", "#D4A373", "#81B29A", "#E07A5F", "#6B7F78", "#B3875B"
 const Metric = ({ icon: Icon, label, value, hue, idx }) => (
   <motion.div
     initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.08 }}
-    className="card-soft p-6"
+    className="glass-card p-6"
   >
     <div className="flex items-center justify-between">
       <span className="label-cap">{label}</span>
@@ -29,10 +29,10 @@ export default function Dashboard() {
     api.get("/dashboard").then((r) => setData(r.data)).finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <div className="card-soft p-12 text-center text-muted">Loading insights…</div>;
+  if (loading) return <div className="glass-card p-12 text-center text-muted">Loading insights…</div>;
   if (!data || data.metrics.requests === 0) {
     return (
-      <div className="card-soft p-12 text-center" data-testid="dashboard-empty">
+      <div className="glass-card p-12 text-center" data-testid="dashboard-empty">
         <BarChart className="w-12 h-12 mx-auto text-sage" />
         <h3 className="font-heading text-2xl text-ink mt-4">No data yet</h3>
         <p className="text-muted mt-2">Submit a request or use Find Help to populate your dashboard.</p>
@@ -57,8 +57,8 @@ export default function Dashboard() {
       </section>
 
       <section className="grid lg:grid-cols-2 gap-6">
-        <div className="card-soft p-6">
-          <h3 className="font-heading text-lg text-ink flex items-center gap-2"><Activity className="w-4 h-4 text-sage" /> Need distribution</h3>
+        <div className="glass-card p-6">
+          <h3 className="font-heading text-lg font-bold text-ink flex items-center gap-2"><Activity className="w-4 h-4 text-sage" /> Need distribution</h3>
           <div className="h-64 mt-4">
             <ResponsiveContainer>
               <BarChart data={needData}>
@@ -73,8 +73,8 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="card-soft p-6">
-          <h3 className="font-heading text-lg text-ink flex items-center gap-2"><Activity className="w-4 h-4 text-urgent" /> Urgency mix</h3>
+        <div className="glass-card p-6">
+          <h3 className="font-heading text-lg font-bold text-ink flex items-center gap-2"><Activity className="w-4 h-4 text-urgent" /> Urgency mix</h3>
           <div className="h-64 mt-4">
             <ResponsiveContainer>
               <BarChart data={urgencyData}>
@@ -93,8 +93,8 @@ export default function Dashboard() {
       </section>
 
       <section className="grid lg:grid-cols-[1.2fr_1fr] gap-6">
-        <div className="card-soft p-6">
-          <h3 className="font-heading text-lg text-ink flex items-center gap-2"><Globe2 className="w-4 h-4 text-sage" /> Locations</h3>
+        <div className="glass-card p-6">
+          <h3 className="font-heading text-lg font-bold text-ink flex items-center gap-2"><Globe2 className="w-4 h-4 text-sage" /> Locations</h3>
           <ul className="mt-4 space-y-2">
             {Object.entries(data.by_location).slice(0, 8).map(([loc, n]) => (
               <li key={loc} className="flex items-center justify-between p-3 rounded-2xl bg-cream border border-line/60">
@@ -106,8 +106,8 @@ export default function Dashboard() {
           </ul>
         </div>
 
-        <div className="card-soft p-6">
-          <h3 className="font-heading text-lg text-ink flex items-center gap-2"><AlertTriangle className="w-4 h-4 text-urgent" /> High priority</h3>
+        <div className="glass-card p-6">
+          <h3 className="font-heading text-lg font-bold text-ink flex items-center gap-2"><AlertTriangle className="w-4 h-4 text-urgent" /> High priority</h3>
           {data.high_priority.length === 0 ? (
             <p className="text-muted mt-3 text-sm">No high-priority requests right now.</p>
           ) : (
@@ -123,8 +123,8 @@ export default function Dashboard() {
         </div>
       </section>
 
-      <section className="card-soft p-6">
-        <h3 className="font-heading text-lg text-ink flex items-center gap-2"><Activity className="w-4 h-4 text-sage" /> Recent activity</h3>
+      <section className="glass-card p-6">
+        <h3 className="font-heading text-lg font-bold text-ink flex items-center gap-2"><Activity className="w-4 h-4 text-sage" /> Recent activity</h3>
         <ul className="mt-4 divide-y divide-line/70">
           {data.recent.map((r) => (
             <li key={r.id} className="py-3 flex items-center justify-between gap-4 flex-wrap">

@@ -28,7 +28,7 @@ export default function Profile() {
 
   return (
     <div className="grid lg:grid-cols-[320px_1fr] gap-6" data-testid="profile-page">
-      <motion.aside initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="card-soft p-6 text-center">
+      <motion.aside initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="glass-card p-6 text-center">
         <motion.img src={ICON_3D} className="w-32 h-32 mx-auto" animate={{ y: [0, -6, 0] }} transition={{ duration: 3, repeat: Infinity }} />
         <h2 className="font-heading text-xl text-ink mt-4">{user?.name}</h2>
         <p className="text-sm text-muted">{user?.email}</p>
@@ -40,7 +40,7 @@ export default function Profile() {
 
       <motion.form
         initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-        onSubmit={save} className="card-soft p-8 space-y-5"
+        onSubmit={save} className="glass-card p-8 space-y-5"
       >
         <div>
           <h2 className="font-heading text-2xl text-ink">My profile</h2>

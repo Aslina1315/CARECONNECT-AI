@@ -57,7 +57,7 @@ export default function Settings() {
         <p className="text-muted mt-1">Tune CareConnect to feel right for you.</p>
       </motion.div>
 
-      <div className="card-soft p-6 sm:p-8">
+      <div className="glass-card p-6 sm:p-8">
         <Row icon={Bell} title="Notifications" desc="Get gentle nudges when help is matched.">
           <Toggle on={s.notifications} onChange={(v) => setS({ ...s, notifications: v })} testid="set-notifications" />
         </Row>
@@ -75,7 +75,7 @@ export default function Settings() {
         </div>
       </div>
 
-      <div className="card-soft p-6 flex items-center gap-3">
+      <div className="glass-card p-6 flex items-center gap-3">
         <Heart className="w-4 h-4 text-urgent" />
         <p className="text-sm text-muted">Your data stays yours. We never sell or share personal information.</p>
       </div>

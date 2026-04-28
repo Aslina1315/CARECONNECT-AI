@@ -44,8 +44,8 @@ export default function Chat() {
 
   return (
     <div className="grid lg:grid-cols-[1fr_320px] gap-6" data-testid="chat-page">
-      <div className="card-soft p-0 overflow-hidden flex flex-col h-[calc(100vh-160px)] min-h-[560px]">
-        <div className="px-6 py-5 border-b border-line flex items-center gap-3 bg-gradient-to-r from-sage/5 to-transparent">
+      <div className="glass-card p-0 overflow-hidden flex flex-col h-[calc(100vh-160px)] min-h-[560px]">
+        <div className="px-6 py-5 border-b border-line flex items-center gap-3 bg-gradient-to-r from-sage/8 via-indigo-glow/5 to-transparent">
           <motion.img
             src={ICON_3D} alt="" className="w-10 h-10"
             animate={{ y: [0, -3, 0] }} transition={{ duration: 2.4, repeat: Infinity }}
@@ -158,8 +158,8 @@ export default function Chat() {
       </div>
 
       <aside className="space-y-4">
-        <div className="card-soft p-6">
-          <h3 className="font-heading text-lg text-ink">Crisis lines</h3>
+        <div className="glass-card p-6">
+          <h3 className="font-heading text-lg font-bold text-ink">Crisis lines</h3>
           <p className="text-sm text-muted mt-1">If you're in danger, reach out now.</p>
           <ul className="mt-4 space-y-3 text-sm">
             <li className="flex items-center justify-between"><span>Emergency</span><a className="text-sage font-medium" href="tel:112">112</a></li>
@@ -167,8 +167,10 @@ export default function Chat() {
             <li className="flex items-center justify-between"><span>Vandrevala Foundation</span><a className="text-sage font-medium" href="tel:18602662345">1860-266-2345</a></li>
           </ul>
         </div>
-        <div className="card-soft p-6 bg-gradient-to-br from-white to-terracotta/10">
-          <h3 className="font-heading text-lg text-ink">Tip</h3>
+        <div className="glass-card p-6 relative overflow-hidden">
+          <div className="absolute -top-6 -right-6 w-28 h-28 rounded-full opacity-30 blur-2xl"
+            style={{ background: "linear-gradient(135deg, #14B8A6, #6366F1)" }} />
+          <h3 className="font-heading text-lg font-bold text-ink relative">Tip</h3>
           <p className="text-sm text-muted mt-1 leading-relaxed">
             After chatting, head to <span className="text-sage font-medium">Find Help</span> — we'll suggest organizations near you.
           </p>

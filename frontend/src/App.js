@@ -1,5 +1,5 @@
-import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { Toaster } from "sonner";
 import { AuthProvider, useAuth } from "./lib/auth";
 import Layout from "./components/Layout";
@@ -14,7 +14,23 @@ import "./App.css";
 
 function Protected({ children }) {
   const { user, loading } = useAuth();
-  if (loading) return <div className="min-h-screen flex items-center justify-center text-muted">Loading…</div>;
+  const location = useLocation();
+  const nav = useNavigate();
+
+  // Defensive: if user becomes null after first render, push to login.
+  useEffect(() => {
+    if (!loading && !user) {
+      nav("/login", { replace: true, state: { from: location.pathname } });
+    }
+  }, [user, loading, nav, location.pathname]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-muted font-medium">
+        Loading…
+      </div>
+    );
+  }
   if (!user) return <Navigate to="/login" replace />;
   return <Layout>{children}</Layout>;
 }
@@ -30,7 +46,17 @@ export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Toaster position="top-right" richColors closeButton />
+        <Toaster
+          position="top-right"
+          richColors
+          closeButton
+          toastOptions={{
+            style: {
+              fontFamily: "Inter, sans-serif",
+              borderRadius: "16px",
+            },
+          }}
+        />
         <Routes>
           <Route path="/login" element={<PublicOnly><Login /></PublicOnly>} />
           <Route path="/" element={<Protected><Home /></Protected>} />

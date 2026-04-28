@@ -54,7 +54,7 @@ export default function FindHelp() {
         <p className="text-muted mt-2 max-w-xl">Describe what you need. We'll match you with thoughtful, real-feel resources.</p>
       </section>
 
-      <form onSubmit={search} className="card-soft p-6 sm:p-8 grid md:grid-cols-[2fr_1.2fr_auto] gap-3 items-end">
+      <form onSubmit={search} className="glass-card p-6 sm:p-8 grid md:grid-cols-[2fr_1.2fr_auto] gap-3 items-end">
         <div className="space-y-2">
           <label className="label-cap">Describe your need</label>
           <input
@@ -105,7 +105,7 @@ export default function FindHelp() {
                 key={i}
                 initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.06 }}
-                className="card-soft overflow-hidden hover:shadow-hover hover:-translate-y-1 transition-all"
+                className="glass-card overflow-hidden hover:shadow-hover hover:-translate-y-1 transition-all"
                 data-testid="org-card"
               >
                 <div className="relative h-40 overflow-hidden">
@@ -150,9 +150,9 @@ export default function FindHelp() {
       )}
 
       {!result && !busy && (
-        <div className="card-soft p-12 text-center">
+        <div className="glass-card p-12 text-center">
           <Search className="w-12 h-12 mx-auto text-sage" />
-          <h3 className="font-heading text-2xl text-ink mt-4">Ready when you are</h3>
+          <h3 className="font-heading text-2xl font-bold text-ink mt-4">Ready when you are</h3>
           <p className="text-muted mt-2">Describe your need above to discover personalized resources.</p>
         </div>
       )}

@@ -1,14 +1,21 @@
 import React from "react";
-import Navbar from "./Navbar";
 import { motion } from "framer-motion";
+import Navbar from "./Navbar";
+import FloatingAI from "./FloatingAI";
 
 export default function Layout({ children }) {
   return (
     <div className="relative min-h-screen overflow-x-hidden">
-      {/* Decorative blobs */}
-      <div className="blob bg-sage/30 w-[420px] h-[420px] -top-32 -left-24 animate-blob" />
-      <div className="blob bg-terracotta/25 w-[480px] h-[480px] top-40 -right-32 animate-blob" style={{ animationDelay: "3s" }} />
-      <div className="blob bg-success/20 w-[360px] h-[360px] bottom-0 left-1/3 animate-blob" style={{ animationDelay: "6s" }} />
+      {/* Decorative blobs — blue + mint + indigo glow */}
+      <div className="blob bg-sage/35 w-[460px] h-[460px] -top-32 -left-24 animate-blob" />
+      <div
+        className="blob w-[520px] h-[520px] top-40 -right-32 animate-blob"
+        style={{ background: "rgba(20, 184, 166, 0.30)", animationDelay: "3s" }}
+      />
+      <div
+        className="blob w-[400px] h-[400px] bottom-0 left-1/3 animate-blob"
+        style={{ background: "rgba(99, 102, 241, 0.30)", animationDelay: "6s" }}
+      />
 
       <Navbar />
 
@@ -20,6 +27,8 @@ export default function Layout({ children }) {
       >
         {children}
       </motion.main>
+
+      <FloatingAI />
 
       <footer className="relative px-6 py-10 text-center text-xs text-muted">
         Made with care · CareConnect AI © {new Date().getFullYear()}
